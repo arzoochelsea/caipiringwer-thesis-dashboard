@@ -1,0 +1,13 @@
+Sample,Medium,Microbial_status,Beverage_Type,Treatment,Date_Parsed,Display_Date,Normalized_Status,Risk_Score,Short_Status
+S1,E.coli,Very high growth,Caipiringwer Regular,Non-pasteurised,2025-07-15,15 Jul 2025,Critical,0,TNTC
+S1,Yeast & Mold (MEA),No growth,Caipiringwer Regular,Non-pasteurised,2025-07-15,15 Jul 2025,Safe,100,Negative
+S2,E.coli,Very high growth,Caipiringwer Spritz,Non-pasteurised,2025-07-24,24 Jul 2025,Critical,0,TNTC
+S2,Yeast & Mold (MEA),No growth,Caipiringwer Spritz,Non-pasteurised,2025-07-24,24 Jul 2025,Safe,100,Negative
+S3,E.coli,Low growth,Caipiringwer Regular,Pasteurised,2025-07-01,01 Jul 2025,Low,75,Low Growth
+S3,Yeast & Mold (MEA),No growth,Caipiringwer Regular,Pasteurised,2025-07-01,01 Jul 2025,Safe,100,Negative
+S4,E.coli,No growth,Caipiringwer Spritz,Pasteurised,2025-07-08,08 Jul 2025,Safe,100,Negative
+S4,Yeast & Mold (MEA),No growth,Caipiringwer Spritz,Pasteurised,2025-07-08,08 Jul 2025,Safe,100,Negative
+S5,E.coli,Low growth,Caipiringwer Regular,Pasteurised,2025-12-04,04 Dec 2025,Low,75,Low Growth
+S5,Yeast & Mold (MEA),No growth,Caipiringwer Regular,Pasteurised,2025-12-04,04 Dec 2025,Safe,100,Negative
+S6,E.coli,Countable growth,Caipiringwer Regular,Pasteurised,2024-11-01,01 Nov 2024,Moderate,50,Countable
+S6,Yeast & Mold (MEA),No growth,Caipiringwer Regular,Pasteurised,2024-11-01,01 Nov 2024,Safe,100,Negative

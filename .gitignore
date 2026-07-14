@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+.vscode/
+.agents/
+app_backup_*.py
+*.log
+*.tmp
+*.temp
+.streamlit/secrets.toml
+secrets*
