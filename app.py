@@ -153,9 +153,9 @@ st.markdown(
     .evidence-status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #36a88e; box-shadow: 0 0 0 4px rgba(54,168,142,.12); }
     .governance-note { padding: 1rem 1.1rem; border-radius: 16px; border: 1px solid rgba(217,170,82,.24); background: linear-gradient(110deg, rgba(217,170,82,.10), rgba(255,255,255,.72)); color: #564624; font-size: .86rem; line-height: 1.6; }
     .shelf-hero {
-        position: relative; min-height: 420px; overflow: hidden; margin: .6rem 0 1.2rem;
-        border-radius: 24px; border: 1px solid rgba(104,209,199,.2);
-        background-size: cover; background-position: center; box-shadow: 0 22px 54px rgba(6,34,54,.20);
+        position: relative; min-height: 300px; overflow: hidden; margin: .6rem 0 1.1rem;
+        border-radius: 20px; border: 1px solid rgba(104,209,199,.2);
+        background-size: cover; background-position: center 44%; box-shadow: 0 16px 40px rgba(6,34,54,.16);
     }
     .shelf-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(4,20,36,.08), rgba(4,20,36,.72)); }
     .shelf-hero-copy { position: absolute; z-index: 2; left: 2rem; right: 2rem; bottom: 1.7rem; color: white; }
@@ -183,6 +183,21 @@ st.markdown(
     .batch-card { padding: 1rem; border-radius: 16px; border: 1px solid var(--line); background: rgba(255,255,255,.88); }
     .batch-date { color: #0d6477; font-size: 1.05rem; font-weight: 780; }
     .batch-labels { color: #637888; font-size: .78rem; line-height: 1.55; margin-top: .35rem; }
+    .study-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: .85rem; margin: .8rem 0 1.5rem; }
+    .study-card {
+        min-height: 118px; padding: 1rem 1.05rem; border-radius: 16px; border: 1px solid var(--line);
+        background: linear-gradient(145deg, rgba(255,255,255,.97), rgba(241,249,250,.88));
+        box-shadow: 0 10px 28px rgba(14,53,78,.055);
+    }
+    .study-label { color: #718797; font-size: .66rem; font-weight: 780; letter-spacing: .1em; text-transform: uppercase; }
+    .study-value { color: #123d55; font-size: 1.06rem; font-weight: 790; margin: .38rem 0 .3rem; }
+    .study-detail { color: #667d8d; font-size: .75rem; line-height: 1.4; }
+    .process-strip { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 1px; overflow: hidden; margin: .8rem 0 1rem; border: 1px solid var(--line); border-radius: 16px; background: var(--line); }
+    .process-stage { padding: 1rem; background: rgba(255,255,255,.94); }
+    .process-stage strong { display: block; color: #0d6477; font-size: .9rem; margin-bottom: .25rem; }
+    .process-stage span { color: #687e8d; font-size: .75rem; line-height: 1.4; }
+    .analysis-banner { padding: 1.05rem 1.15rem; margin: .8rem 0 1.1rem; border-radius: 16px; border-left: 4px solid #188b91; background: linear-gradient(105deg, rgba(24,139,145,.10), rgba(255,255,255,.92)); color: #28465a; line-height: 1.55; }
+    .analysis-banner strong { color: #0b6473; }
 
     @media (max-width: 800px) {
         .block-container { padding: 1rem 1rem 3rem; }
@@ -190,13 +205,14 @@ st.markdown(
         .dashboard-hero::before { background: linear-gradient(180deg, rgba(4,19,37,.24) 0%, rgba(4,19,37,.52) 48%, rgba(4,19,37,.96) 76%); }
         .hero-title { font-size: 2rem; }
         [data-testid="stMetric"] { min-height: 100px; }
-        .audit-ribbon, .evidence-grid { grid-template-columns: 1fr 1fr; }
-        .shelf-hero { min-height: 460px; background-position: 40% center; }
+        .audit-ribbon, .evidence-grid, .study-grid, .process-strip { grid-template-columns: 1fr 1fr; }
+        .shelf-hero { min-height: 340px; background-position: 40% center; }
         .shelf-hero-copy { left: 1.2rem; right: 1.2rem; bottom: 1.2rem; }
         .evidence-flow, .batch-map { grid-template-columns: 1fr; }
         .evidence-flow::before, .evidence-flow::after, .flow-dot { display: none; }
         .flow-step { padding-top: 0; }
     }
+    @media (max-width: 520px) { .study-grid, .process-strip { grid-template-columns: 1fr; } }
     @media (prefers-reduced-motion: reduce) { .evidence-flow::after, .flow-step.unresolved .flow-dot { animation: none; } }
     </style>
     """,
@@ -260,7 +276,7 @@ TRANSLATIONS["EN"].update({
     "sed_images_loaded": "Sedimentation images loaded", "micro_images_loaded": "Microbiology images loaded",
     "project": "Project", "degree": "Degree", "institution": "Institution", "instrumentation": "Instrumentation",
     "project_value": "Caipiringwer Stability Assessment", "degree_value": "MSc Biotechnology", "institution_value": "Hochschule Ansbach",
-    "top_executive": "🏠 Executive Summary", "top_rheology": "🧪 Rheology", "top_physchem": "🧃 Physicochemical", "top_sedimentation": "🟤 Sedimentation", "top_microbiology": "🦠 Microbiology", "top_references": "📚 References", "top_shelf_life": "⏳ Shelf-life evidence",
+    "top_executive": "🏠 Executive Summary", "top_rheology": "🧪 Rheology", "top_physchem": "🧃 Physicochemical", "top_sedimentation": "🟤 Sedimentation", "top_microbiology": "🦠 Microbiology", "top_references": "📚 References", "top_shelf_life": "📈 Stability assessment",
     "flow_curve": "Flow Curve", "amplitude_sweep": "Amplitude Sweep", "frequency_sweep": "Frequency Sweep", "interpretation": "Interpretation",
     "overview": "Overview", "composition": "Composition", "trends": "Trends", "correlations": "Correlations",
     "sed_images": "📷 Images", "sed_analysis": "📈 Analysis", "sed_interpretation": "🧠 Interpretation", "sed_references": "📚 References",
@@ -281,7 +297,7 @@ TRANSLATIONS["DE"].update({
     "sed_images_loaded": "Sedimentationsbilder geladen", "micro_images_loaded": "Mikrobiologiebilder geladen",
     "project": "Projekt", "degree": "Abschluss", "institution": "Institution", "instrumentation": "Instrumentierung",
     "project_value": "Caipiringwer-Stabilitätsbewertung", "degree_value": "MSc Biotechnologie", "institution_value": "Hochschule Ansbach",
-    "top_executive": "🏠 Managementübersicht", "top_rheology": "🧪 Rheologie", "top_physchem": "🧃 Physikochemie", "top_sedimentation": "🟤 Sedimentation", "top_microbiology": "🦠 Mikrobiologie", "top_references": "📚 Literatur", "top_shelf_life": "⏳ Haltbarkeitsevidenz",
+    "top_executive": "🏠 Managementübersicht", "top_rheology": "🧪 Rheologie", "top_physchem": "🧃 Physikochemie", "top_sedimentation": "🟤 Sedimentation", "top_microbiology": "🦠 Mikrobiologie", "top_references": "📚 Literatur", "top_shelf_life": "📈 Stabilitätsbewertung",
     "flow_curve": "Fließkurve", "amplitude_sweep": "Amplitudensweep", "frequency_sweep": "Frequenzsweep", "interpretation": "Interpretation",
     "overview": "Übersicht", "composition": "Zusammensetzung", "trends": "Trends", "correlations": "Korrelationen",
     "sed_images": "📷 Bilder", "sed_analysis": "📈 Analyse", "sed_interpretation": "🧠 Interpretation", "sed_references": "📚 Literatur",
@@ -1746,19 +1762,18 @@ with top_tabs[6]:
         unsafe_allow_html=True,
     )
 
-    st.markdown(tr("### Study conditions", "### Untersuchungsbedingungen"))
-    study_conditions = pd.DataFrame([
-        [tr("Study period", "Untersuchungszeitraum"), tr("February–March 2026", "Februar–März 2026")],
-        [T["rheology"], tr("February 2026; exact day not recorded", "Februar 2026; genauer Tag nicht dokumentiert")],
-        [T["physicochemical"], tr("11 February 2026", "11. Februar 2026")],
-        [T["sedimentation"], tr("11 February and 11 March 2026", "11. Februar und 11. März 2026")],
-        [T["microbiology"], tr("First week of March 2026; exact day not recorded", "Erste Märzwoche 2026; genauer Tag nicht dokumentiert")],
-        [tr("Storage", "Lagerung"), tr("Room temperature; numerical temperature range not recorded", "Raumtemperatur; numerischer Temperaturbereich nicht dokumentiert")],
-        [tr("Confirmed production process", "Bestätigter Herstellungsprozess"), tr("Stick-blender homogenisation and repeated mixing during filling applied to both confirmed batches", "Stabmixer-Homogenisierung und wiederholtes Durchmischen bei der Abfüllung bei beiden bestätigten Losen angewendet")],
-        [tr("Final thermal treatment", "Abschließende Wärmebehandlung"), tr("85 °C for 15 minutes", "85 °C für 15 Minuten")],
-        [tr("Microbial data type", "Art der mikrobiologischen Daten"), tr("Qualitative plate observations; no numerical colony counts", "Qualitative Plattenbeobachtungen; keine numerischen Koloniezahlen")],
-    ], columns=[tr("Parameter", "Parameter"), tr("Documented condition", "Dokumentierte Bedingung")])
-    st.dataframe(study_conditions, width="stretch", hide_index=True)
+    st.markdown(tr("### Study design", "### Studiendesign"))
+    st.markdown(
+        f"""
+        <div class="study-grid">
+            <div class="study-card"><div class="study-label">{tr('Study window', 'Untersuchungszeitraum')}</div><div class="study-value">{tr('February–March 2026', 'Februar–März 2026')}</div><div class="study-detail">{tr('Rheology and physicochemistry in February; microbiology and final sedimentation review in March.', 'Rheologie und Physikochemie im Februar; Mikrobiologie und finale Sedimentationsbewertung im März.')}</div></div>
+            <div class="study-card"><div class="study-label">{tr('Storage regime', 'Lagerungsregime')}</div><div class="study-value">{tr('Ambient conditions', 'Raumtemperatur')}</div><div class="study-detail">{tr('Both confirmed batches were assessed under the reported room-temperature storage regime.', 'Beide bestätigten Lose wurden unter dem angegebenen Raumtemperaturregime bewertet.')}</div></div>
+            <div class="study-card"><div class="study-label">{tr('Thermal process', 'Thermischer Prozess')}</div><div class="study-value">85 °C × 15 min</div><div class="study-detail">{tr('Final treatment in the RATIONAL ClimaPlus Combi® CPC.', 'Abschließende Behandlung im RATIONAL ClimaPlus Combi® CPC.')}</div></div>
+            <div class="study-card"><div class="study-label">{tr('Production control', 'Prozesskontrolle')}</div><div class="study-value">{tr('Homogenised filling', 'Homogenisierte Abfüllung')}</div><div class="study-detail">{tr('Stick-blender treatment and repeated mixing applied to both batches.', 'Stabmixerbehandlung und wiederholtes Durchmischen bei beiden Losen.')}</div></div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     st.markdown(tr("### Batch traceability", "### Los-Rückverfolgbarkeit"))
     st.markdown(
@@ -1810,95 +1825,107 @@ with top_tabs[6]:
         f"{row['Medium']}: {row['Microbial_status']}"
         for _, row in batch_microbiology.iterrows()
     ) or tr("Not recorded", "Nicht dokumentiert")
+    approximate_age_months = max(1, int(round(documented_checkpoint_days / 30.4375)))
+    approximate_age = tr(f"~{approximate_age_months} months", f"ca. {approximate_age_months} Monate")
+    sediment_result = f"{final_sed_min:.1f}%" if final_sed_min == final_sed_max else f"{final_sed_min:.1f}–{final_sed_max:.1f}%"
 
     shelf_kpis = st.columns(4)
-    shelf_kpis[0].metric(tr("Analytical modules", "Analytische Module"), "4 / 4")
-    shelf_kpis[1].metric(
-        tr("Physicochemical interval", "Physikochemisches Intervall"),
-        f"{documented_checkpoint_days} {tr('days', 'Tage')}",
-        help=tr("Time from manufacture to physicochemical analysis on 11 February 2026.", "Zeit von der Herstellung bis zur physikochemischen Analyse am 11. Februar 2026."),
-    )
-    shelf_kpis[2].metric("pH", f"{ph_min:.2f}" if ph_min == ph_max else f"{ph_min:.2f}–{ph_max:.2f}")
-    shelf_kpis[3].metric(tr("Mean soluble solids", "Mittlere lösliche Feststoffe"), f"{brix_mean:.2f} °Bx")
+    shelf_kpis[0].metric(tr("Approx. batch age", "Ungefähres Losalter"), approximate_age)
+    shelf_kpis[1].metric("pH", f"{ph_min:.2f}" if ph_min == ph_max else f"{ph_min:.2f}–{ph_max:.2f}")
+    shelf_kpis[2].metric(tr("Soluble solids", "Lösliche Feststoffe"), f"{brix_mean:.2f} °Bx")
+    shelf_kpis[3].metric(tr("Final sediment fraction", "Finaler Sedimentanteil"), sediment_result)
 
-    st.markdown(
-        f"""
-        <div class="evidence-flow">
-            <div class="flow-step"><span class="flow-dot"></span><div class="flow-card"><div class="flow-kicker">01 · {tr('BATCH', 'LOS')}</div><div class="flow-title">{batch_date_text}</div><div class="flow-detail">{tr('Linked across all four analytical modules and the confirmed optimized production process.', 'Über alle vier analytischen Module und den bestätigten optimierten Herstellungsprozess verknüpft.')}</div></div></div>
-            <div class="flow-step"><span class="flow-dot"></span><div class="flow-card"><div class="flow-kicker">02 · {tr('MEASUREMENT', 'MESSUNG')}</div><div class="flow-title">{documented_checkpoint_days} {tr('days after manufacture', 'Tage nach Herstellung')}</div><div class="flow-detail">pH {ph_min:.2f}{'' if ph_min == ph_max else f'–{ph_max:.2f}'} · {brix_mean:.2f} °Bx · 11.02.2026</div></div></div>
-            <div class="flow-step"><span class="flow-dot"></span><div class="flow-card"><div class="flow-kicker">03 · {tr('ANALYTICAL PROFILE', 'ANALYTISCHES PROFIL')}</div><div class="flow-title">{tr('Structure and microbiology', 'Struktur und Mikrobiologie')}</div><div class="flow-detail">{tr('Rheology in February, sedimentation in February–March and qualitative microbiology in early March 2026.', 'Rheologie im Februar, Sedimentation im Februar–März und qualitative Mikrobiologie Anfang März 2026.')}</div></div></div>
-            <div class="flow-step unresolved"><span class="flow-dot"></span><div class="flow-card"><div class="flow-kicker">04 · {tr('ASSESSMENT STATUS', 'BEWERTUNGSSTATUS')}</div><div class="flow-title">{tr('Longitudinal validation required', 'Längsschnittvalidierung erforderlich')}</div><div class="flow-detail">{tr('Time-resolved acceptance data are required for shelf-life modelling.', 'Für die Haltbarkeitsmodellierung werden zeitaufgelöste Akzeptanzdaten benötigt.')}</div></div></div>
-        </div>
-        """,
-        unsafe_allow_html=True,
+    st.markdown(tr("### Analytical timeline", "### Analytischer Zeitplan"))
+    timeline_data = pd.DataFrame([
+        [T["rheology"], pd.Timestamp("2026-02-01"), pd.Timestamp("2026-03-01"), tr("February 2026", "Februar 2026")],
+        [T["physicochemical"], pd.Timestamp("2026-02-11"), pd.Timestamp("2026-02-12"), "11.02.2026"],
+        [T["sedimentation"], pd.Timestamp("2026-02-11"), pd.Timestamp("2026-03-12"), tr("11 February–11 March 2026", "11. Februar–11. März 2026")],
+        [T["microbiology"], pd.Timestamp("2026-03-01"), pd.Timestamp("2026-03-08"), tr("Early March 2026", "Anfang März 2026")],
+    ], columns=[tr("Analysis", "Analyse"), "Start", "Finish", tr("Study period", "Untersuchungszeitraum")])
+    timeline_analysis_col = tr("Analysis", "Analyse")
+    timeline_period_col = tr("Study period", "Untersuchungszeitraum")
+    timeline_figure = px.timeline(
+        timeline_data,
+        x_start="Start",
+        x_end="Finish",
+        y=timeline_analysis_col,
+        color=timeline_analysis_col,
+        hover_name=timeline_analysis_col,
+        hover_data={"Start": False, "Finish": False, timeline_period_col: True},
+        color_discrete_sequence=["#146c94", "#1c8ea1", "#68b7a7", "#d0a34a"],
     )
+    timeline_figure.update_yaxes(autorange="reversed", title="")
+    timeline_figure.update_xaxes(title="", tickformat="%d %b", range=[pd.Timestamp("2026-01-29"), pd.Timestamp("2026-03-15")], showgrid=True, gridcolor="rgba(105,133,150,.14)")
+    timeline_figure.update_layout(template=chart_theme, height=300, margin=dict(l=10, r=15, t=15, b=30), showlegend=False, hoverlabel=dict(bgcolor="white"))
+    st.plotly_chart(timeline_figure, width="stretch", config={"displayModeBar": False})
 
     evidence_table = pd.DataFrame([
         {
-            tr("Evidence domain", "Evidenzbereich"): T["physicochemical"],
-            tr("Recorded result", "Dokumentiertes Ergebnis"): f"pH {ph_min:.2f}" + ("" if ph_min == ph_max else f"–{ph_max:.2f}") + f"; Brix {brix_mean:.2f} °Bx",
-            tr("Time basis", "Zeitbasis"): f"11.02.2026 ({documented_checkpoint_days} {tr('days', 'Tage')})",
-            tr("Study context", "Studienkontext"): tr("Single measurement; baseline and acceptance limit required", "Einzelmessung; Ausgangswert und Akzeptanzgrenze erforderlich"),
+            tr("Analysis", "Analyse"): T["physicochemical"],
+            tr("Period", "Zeitraum"): "11.02.2026",
+            tr("Sample coverage", "Probenumfang"): tr("Sample 7", "Probe 7") if batch_date_text == "01.11.2024" else tr("Samples 1–3", "Proben 1–3"),
+            tr("Analytical result", "Analytisches Ergebnis"): f"pH {ph_min:.2f}" + ("" if ph_min == ph_max else f"–{ph_max:.2f}") + f" · {brix_mean:.2f} °Bx",
         },
         {
-            tr("Evidence domain", "Evidenzbereich"): T["sedimentation"],
-            tr("Recorded result", "Dokumentiertes Ergebnis"): f"{tr('Final sediment-bed fraction', 'Finaler Sedimentbettanteil')}: {final_sed_min:.1f}" + ("" if final_sed_min == final_sed_max else f"–{final_sed_max:.1f}") + "%",
-            tr("Time basis", "Zeitbasis"): tr("11.02.2026 and 11.03.2026", "11.02.2026 und 11.03.2026"),
-            tr("Study context", "Studienkontext"): tr("Two observations; replicates and redispersion limit required", "Zwei Beobachtungen; Replikate und Redispergiergrenze erforderlich"),
+            tr("Analysis", "Analyse"): T["sedimentation"],
+            tr("Period", "Zeitraum"): tr("February–March 2026", "Februar–März 2026"),
+            tr("Sample coverage", "Probenumfang"): tr("Sample G", "Probe G") if batch_date_text == "01.11.2024" else tr("Samples A–C", "Proben A–C"),
+            tr("Analytical result", "Analytisches Ergebnis"): f"{tr('Final sediment fraction', 'Finaler Sedimentanteil')} {sediment_result}",
         },
         {
-            tr("Evidence domain", "Evidenzbereich"): T["rheology"],
-            tr("Recorded result", "Dokumentiertes Ergebnis"): f"n={flow_details['n']:.3f}; R²={flow_details['r2']:.3f}",
-            tr("Time basis", "Zeitbasis"): tr("February 2026; exact day not recorded", "Februar 2026; genauer Tag nicht dokumentiert"),
-            tr("Study context", "Studienkontext"): tr("Structural measurement at one storage age", "Strukturmessung zu einem Lagerungszeitpunkt"),
+            tr("Analysis", "Analyse"): T["rheology"],
+            tr("Period", "Zeitraum"): tr("February 2026", "Februar 2026"),
+            tr("Sample coverage", "Probenumfang"): "S1 / Sample 4" if batch_date_text == "01.11.2024" else "S4 / Sample 16",
+            tr("Analytical result", "Analytisches Ergebnis"): f"n={flow_details['n']:.3f} · R²={flow_details['r2']:.3f}",
         },
         {
-            tr("Evidence domain", "Evidenzbereich"): T["microbiology"],
-            tr("Recorded result", "Dokumentiertes Ergebnis"): microbial_status,
-            tr("Time basis", "Zeitbasis"): tr("First week of March 2026; exact day not recorded", "Erste Märzwoche 2026; genauer Tag nicht dokumentiert"),
-            tr("Study context", "Studienkontext"): tr("Qualitative result; quantitative count required for modelling", "Qualitatives Ergebnis; quantitative Keimzahl für die Modellierung erforderlich"),
+            tr("Analysis", "Analyse"): T["microbiology"],
+            tr("Period", "Zeitraum"): tr("Early March 2026", "Anfang März 2026"),
+            tr("Sample coverage", "Probenumfang"): "S6" if batch_date_text == "01.11.2024" else "S5",
+            tr("Analytical result", "Analytisches Ergebnis"): microbial_status,
         },
     ])
     st.dataframe(evidence_table, width="stretch", hide_index=True)
 
-    current_assessment = tr(
-        f"The February–March 2026 measurements provide a batch-specific stability profile for the product manufactured on {batch_date_text}. A numerical shelf-life estimate requires repeated quantitative microbiological and sensory results with defined acceptance limits and storage conditions.",
-        f"Die Messungen von Februar bis März 2026 liefern ein losspezifisches Stabilitätsprofil für das am {batch_date_text} hergestellte Produkt. Eine numerische Haltbarkeitsschätzung erfordert wiederholte quantitative mikrobiologische und sensorische Ergebnisse mit definierten Akzeptanzgrenzen und Lagerbedingungen.",
-    )
     st.markdown(
-        f'<div class="decision-banner"><strong>{tr("Current assessment:", "Aktuelle Bewertung:")}</strong> {current_assessment}</div>',
+        f'<div class="analysis-banner"><strong>{tr("Integrated batch profile", "Integriertes Losprofil")}</strong><br>{tr("The selected batch was assessed at an approximate age of", "Das ausgewählte Los wurde in einem ungefähren Alter von")} {approximate_age}. {tr("The dashboard combines physicochemical composition, sedimentation, rheology and qualitative microbiology into one traceable analytical record.", "Das Dashboard verbindet physikochemische Zusammensetzung, Sedimentation, Rheologie und qualitative Mikrobiologie zu einem rückverfolgbaren analytischen Datensatz.")}</div>',
         unsafe_allow_html=True,
     )
 
-    st.markdown(tr("### Data required for shelf-life modelling", "### Erforderliche Daten für die Haltbarkeitsmodellierung"))
-    validation_requirements = pd.DataFrame([
-        [tr("Time axis", "Zeitachse"), tr("Record the exact rheology and microbiology dates and the product age at every analysis.", "Genaue Rheologie- und Mikrobiologiedaten sowie das Produktalter bei jeder Analyse dokumentieren.")],
-        [tr("Microbiology", "Mikrobiologie"), tr("Quantitative total viable count and yeast/mould enumeration; confirm any target organism with a validated method.", "Quantitative Gesamtkeimzahl und Hefe-/Schimmelzählung; jeden Zielorganismus mit einer validierten Methode bestätigen.")],
-        [tr("Process", "Prozess"), tr("Validate the product core temperature–time profile for the 85 °C/15 min treatment and document hygienic filling controls.", "Kerntemperatur-Zeit-Profil des Produkts für die Behandlung bei 85 °C/15 min validieren und hygienische Abfüllkontrollen dokumentieren.")],
-        [tr("Storage", "Lagerung"), tr("Define and log the numerical room-temperature range, light exposure and package orientation.", "Numerischen Raumtemperaturbereich, Lichtexposition und Verpackungsorientierung festlegen und protokollieren.")],
-        [tr("Quality", "Qualität"), tr("Predefine sensory, chemical, colour, carbonation and physical-stability acceptance limits.", "Sensorische, chemische, farbliche, karbonisierungs- und physikalische Akzeptanzgrenzen vorab festlegen.")],
-        [tr("Study design", "Studiendesign"), tr("Use unopened replicate packages across the intended storage conditions and planned endpoint, with an appropriate safety margin.", "Ungeöffnete Replikatverpackungen über die vorgesehenen Lagerbedingungen und den geplanten Endpunkt mit angemessener Sicherheitsmarge untersuchen.")],
-    ], columns=[tr("Requirement", "Anforderung"), tr("Needed evidence", "Erforderliche Evidenz")])
-    st.dataframe(validation_requirements, width="stretch", hide_index=True)
+    with st.expander(tr("Recommended shelf-life validation plan", "Empfohlener Validierungsplan zur Haltbarkeit")):
+        validation_requirements = pd.DataFrame([
+            [tr("Measurement schedule", "Messplan"), tr("Use standardised storage intervals from production through the intended market-life endpoint.", "Standardisierte Lagerintervalle von der Produktion bis zum vorgesehenen Marktlebensdauer-Endpunkt verwenden.")],
+            [tr("Quantitative microbiology", "Quantitative Mikrobiologie"), tr("Track total viable count and yeast/mould populations using validated enumeration methods.", "Gesamtkeimzahl sowie Hefe-/Schimmelpopulationen mit validierten Zählmethoden verfolgen.")],
+            [tr("Thermal validation", "Thermische Validierung"), tr("Confirm the product core temperature–time profile for the 85 °C/15 min treatment.", "Kerntemperatur-Zeit-Profil des Produkts für die Behandlung bei 85 °C/15 min bestätigen.")],
+            [tr("Storage profile", "Lagerungsprofil"), tr("Log ambient temperature, light exposure and package orientation throughout the study.", "Raumtemperatur, Lichtexposition und Verpackungsorientierung während der Studie protokollieren.")],
+            [tr("Quality endpoint", "Qualitätsendpunkt"), tr("Apply predefined sensory, colour, carbonation and physical-stability specifications.", "Vordefinierte Spezifikationen für Sensorik, Farbe, Karbonisierung und physikalische Stabilität anwenden.")],
+            [tr("Statistical design", "Statistisches Design"), tr("Assess unopened replicate packages from independent production batches at each interval.", "Ungeöffnete Replikatverpackungen unabhängiger Produktionslose bei jedem Intervall untersuchen.")],
+        ], columns=[tr("Work package", "Arbeitspaket"), tr("Proposed design", "Vorgeschlagenes Design")])
+        st.dataframe(validation_requirements, width="stretch", hide_index=True)
 
-    st.markdown(tr("### Confirmed process-development evidence", "### Bestätigte Evidenz zur Prozessentwicklung"))
-    process_evidence = pd.DataFrame([
-        [tr("Process sequence", "Prozessfolge"), tr("Lime-containing mixture heated at 90–100 °C for four minutes; Cachaça added after removal from the hotplate.", "Limettenhaltige Mischung vier Minuten bei 90–100 °C erhitzt; Cachaça nach dem Abnehmen von der Heizplatte zugegeben.")],
-        [tr("Homogenisation", "Homogenisierung"), tr("Stick-blender treatment after ginger addition, followed by repeated mixing during 200 mL bottle filling.", "Stabmixerbehandlung nach der Ingwerzugabe, anschließend wiederholtes Durchmischen während der Abfüllung in 200-ml-Flaschen.")],
-        [tr("Final treatment", "Abschließende Behandlung"), tr("RATIONAL ClimaPlus Combi® CPC set to 85 °C for 15 minutes using dry and moist heat.", "RATIONAL ClimaPlus Combi® CPC auf 85 °C für 15 Minuten mit trockener und feuchter Hitze eingestellt.")],
-        [tr("Reported observation", "Dokumentierte Beobachtung"), tr("No undesirable visual change was reported in the filled 200 mL bottles after two weeks.", "Nach zwei Wochen wurde bei den abgefüllten 200-ml-Flaschen keine unerwünschte optische Veränderung dokumentiert.")],
-        [tr("Batch applicability", "Anwendbarkeit auf die Lose"), tr("The optimized homogenisation and filling procedure was confirmed for both manufacturing batches shown above.", "Das optimierte Homogenisierungs- und Abfüllverfahren wurde für beide oben dargestellten Herstellungslose bestätigt.")],
-        [tr("Evidence classification", "Evidenzklassifikation"), tr("Direct process evidence and qualitative visual-stability evidence for the confirmed production procedure.", "Direkte Prozessevidenz und qualitative Evidenz zur visuellen Stabilität für das bestätigte Herstellungsverfahren.")],
-    ], columns=[tr("Aspect", "Aspekt"), tr("Reported information", "Dokumentierte Information")])
-    st.dataframe(process_evidence, width="stretch", hide_index=True)
+    st.markdown(tr("### Confirmed production pathway", "### Bestätigter Herstellungsablauf"))
+    st.markdown(
+        f"""
+        <div class="process-strip">
+            <div class="process-stage"><strong>01 · {tr('Thermal extraction', 'Thermische Extraktion')}</strong><span>{tr('Lime-containing mixture at 90–100 °C for four minutes.', 'Limettenhaltige Mischung vier Minuten bei 90–100 °C.')}</span></div>
+            <div class="process-stage"><strong>02 · {tr('Homogenisation', 'Homogenisierung')}</strong><span>{tr('Stick-blender treatment after ginger addition.', 'Stabmixerbehandlung nach der Ingwerzugabe.')}</span></div>
+            <div class="process-stage"><strong>03 · {tr('Controlled filling', 'Kontrollierte Abfüllung')}</strong><span>{tr('Cachaça addition followed by repeated mixing during 200 mL filling.', 'Cachaça-Zugabe mit wiederholtem Durchmischen bei der 200-ml-Abfüllung.')}</span></div>
+            <div class="process-stage"><strong>04 · {tr('Final treatment', 'Abschließende Behandlung')}</strong><span>85 °C × 15 min · RATIONAL ClimaPlus Combi® CPC</span></div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     st.caption(tr(
-        "Source: Bennani, I. (2025). Herstellung eines alkoholischen Mischgetränks. Project report in Product Development, Food: Product and Process Development, FH JOANNEUM; prepared at Mandi-o Qualität Lebensmittel GbR, submitted 30 June 2025. Methods pp. 7–13, results pp. 14–17, Appendix A pp. 25–28. Internal project report supplied by the research collaborator; application of the optimized procedure to both displayed batches was confirmed by the researcher.",
-        "Quelle: Bennani, I. (2025). Herstellung eines alkoholischen Mischgetränks. Projektarbeit im Themenschwerpunkt Produktentwicklung, Studiengang Lebensmittel: Produkt- und Prozessentwicklung, FH JOANNEUM; bearbeitet bei Mandi-o Qualität Lebensmittel GbR, eingereicht am 30. Juni 2025. Methodik S. 7–13, Ergebnisse S. 14–17, Anhang A S. 25–28. Vom Forschungspartner bereitgestellter interner Projektbericht; die Anwendung des optimierten Verfahrens auf beide dargestellten Lose wurde von der Forscherin bestätigt.",
+        "Bennani (2025) reported uniform visual appearance in the 200 mL bottles after two weeks. The optimized process was confirmed for both manufacturing batches displayed in this dashboard.",
+        "Bennani (2025) dokumentierte nach zwei Wochen ein einheitliches visuelles Erscheinungsbild der 200-ml-Flaschen. Der optimierte Prozess wurde für beide in diesem Dashboard dargestellten Herstellungslose bestätigt.",
     ))
 
-    st.markdown(tr("### Post-2020 scientific and regulatory basis", "### Wissenschaftliche und regulatorische Grundlage ab 2021"))
-    st.markdown(
-        tr(
+    with st.expander(tr("Scientific basis and source traceability", "Wissenschaftliche Grundlage und Quellenrückverfolgung")):
+        st.markdown(tr(
+            "**Internal process source:** Bennani, I. (2025). _Herstellung eines alkoholischen Mischgetränks_. FH JOANNEUM project report, prepared at Mandi-o Qualität Lebensmittel GbR. Methods pp. 7–13; results pp. 14–17; Appendix A pp. 25–28.",
+            "**Interne Prozessquelle:** Bennani, I. (2025). _Herstellung eines alkoholischen Mischgetränks_. Projektarbeit, FH JOANNEUM, bearbeitet bei Mandi-o Qualität Lebensmittel GbR. Methodik S. 7–13; Ergebnisse S. 14–17; Anhang A S. 25–28.",
+        ))
+        st.markdown(tr(
             "- **EFSA BIOHAZ Panel (2021).** Risk-based shelf-life decisions must consider intrinsic factors, processing, packaging and storage within the food-safety management system. [EFSA Journal 19(4):6510](https://doi.org/10.2903/j.efsa.2021.6510)\n"
             "- **Tiencheu et al. (2021).** Lemon–ginger beverage work combined physicochemical, microbiological and sensory measurements; its formulation-specific results cannot be transferred as a Caipiringwer expiry date. [Heliyon 7:e07177](https://doi.org/10.1016/j.heliyon.2021.e07177)\n"
             "- **Szczepańska et al. (2021).** A controlled apple-juice storage study measured microbial, rheological and physicochemical change repeatedly for up to 12 weeks, illustrating the longitudinal design needed for a shelf-life claim. [LWT 150:112038](https://doi.org/10.1016/j.lwt.2021.112038)\n"
@@ -1913,8 +1940,7 @@ with top_tabs[6]:
             "- **Prisacaru et al. (2023).** Forschung zu ingwerhaltigen Säften überwachte physikochemische und mikrobiologische Merkmale während der Lagerung; Unterschiede in Rezeptur, Verarbeitung und Lagerung verhindern eine direkte Übertragung der Dauer. [Foods 12:1311](https://doi.org/10.3390/foods12061311)\n"
             "- **Shiekh et al. (2024).** Die Haltbarkeit pasteurisierten Passionsfruchtsafts wurde anhand wiederholter Hefe-/Schimmelmessungen unter definierter Kühllagerung bestimmt, nicht allein anhand des pH-Werts. [Foods 13:719](https://doi.org/10.3390/foods13050719)\n"
             "- **ISO 4833-1:2013/Amd 1:2022.** Aktuelle Änderung zur aeroben Koloniezählung bei 30 °C. [ISO-Eintrag](https://www.iso.org/standard/73329.html)",
-        )
-    )
+        ))
 
 with top_tabs[5]:
     st.header(T["literature_header"])
