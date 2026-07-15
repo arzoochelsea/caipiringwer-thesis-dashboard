@@ -152,6 +152,37 @@ st.markdown(
     .evidence-status { display: inline-flex; align-items: center; gap: .35rem; margin-top: .75rem; color: #24675f; font-size: .72rem; font-weight: 720; }
     .evidence-status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #36a88e; box-shadow: 0 0 0 4px rgba(54,168,142,.12); }
     .governance-note { padding: 1rem 1.1rem; border-radius: 16px; border: 1px solid rgba(217,170,82,.24); background: linear-gradient(110deg, rgba(217,170,82,.10), rgba(255,255,255,.72)); color: #564624; font-size: .86rem; line-height: 1.6; }
+    .shelf-hero {
+        position: relative; min-height: 420px; overflow: hidden; margin: .6rem 0 1.2rem;
+        border-radius: 24px; border: 1px solid rgba(104,209,199,.2);
+        background-size: cover; background-position: center; box-shadow: 0 22px 54px rgba(6,34,54,.20);
+    }
+    .shelf-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(4,20,36,.08), rgba(4,20,36,.72)); }
+    .shelf-hero-copy { position: absolute; z-index: 2; left: 2rem; right: 2rem; bottom: 1.7rem; color: white; }
+    .shelf-hero-copy h2 { color: white !important; max-width: 790px; margin: 0 0 .55rem !important; font-size: 1.75rem; }
+    .shelf-hero-copy p { max-width: 820px; margin: 0; color: rgba(255,255,255,.74); font-size: .92rem; }
+    .evidence-flow { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 1.2rem 0 1.6rem; }
+    .evidence-flow::before { content: ""; position: absolute; top: 18px; left: 7%; right: 7%; height: 2px; background: #d8e5e9; }
+    .evidence-flow::after {
+        content: ""; position: absolute; top: 18px; left: 7%; width: 18%; height: 2px;
+        background: linear-gradient(90deg, #1c8ea1, #68d1c7); box-shadow: 0 0 12px rgba(47,167,184,.8);
+        animation: evidenceSweep 4.8s ease-in-out infinite;
+    }
+    @keyframes evidenceSweep { 0% { transform: translateX(0); opacity: .2; } 45% { opacity: 1; } 100% { transform: translateX(345%); opacity: .15; } }
+    .flow-step { position: relative; z-index: 1; padding-top: 2.8rem; }
+    .flow-dot { position: absolute; top: 9px; left: calc(50% - 10px); width: 20px; height: 20px; border-radius: 50%; background: white; border: 5px solid #2b8c9d; box-shadow: 0 0 0 5px rgba(43,140,157,.11); }
+    .flow-step.unresolved .flow-dot { border-color: #c58e32; background: #fff8e8; animation: unresolvedPulse 2.2s ease-out infinite; }
+    @keyframes unresolvedPulse { 0% { box-shadow: 0 0 0 0 rgba(197,142,50,.34); } 75% { box-shadow: 0 0 0 12px rgba(197,142,50,0); } 100% { box-shadow: 0 0 0 0 rgba(197,142,50,0); } }
+    .flow-card { min-height: 130px; padding: .9rem; border-radius: 15px; border: 1px solid var(--line); background: rgba(255,255,255,.9); }
+    .flow-kicker { color: #708695; font-size: .66rem; font-weight: 760; letter-spacing: .08em; text-transform: uppercase; }
+    .flow-title { color: #173b50; font-size: .9rem; font-weight: 760; margin: .25rem 0; }
+    .flow-detail { color: #647888; font-size: .75rem; line-height: 1.45; }
+    .decision-banner { padding: 1.15rem 1.2rem; border-radius: 17px; border: 1px solid rgba(190,123,38,.25); background: linear-gradient(110deg, #fff8e8, rgba(255,255,255,.9)); }
+    .decision-banner strong { color: #8b5a17; }
+    .batch-map { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: .7rem 0 1.3rem; }
+    .batch-card { padding: 1rem; border-radius: 16px; border: 1px solid var(--line); background: rgba(255,255,255,.88); }
+    .batch-date { color: #0d6477; font-size: 1.05rem; font-weight: 780; }
+    .batch-labels { color: #637888; font-size: .78rem; line-height: 1.55; margin-top: .35rem; }
 
     @media (max-width: 800px) {
         .block-container { padding: 1rem 1rem 3rem; }
@@ -160,7 +191,13 @@ st.markdown(
         .hero-title { font-size: 2rem; }
         [data-testid="stMetric"] { min-height: 100px; }
         .audit-ribbon, .evidence-grid { grid-template-columns: 1fr 1fr; }
+        .shelf-hero { min-height: 460px; background-position: 40% center; }
+        .shelf-hero-copy { left: 1.2rem; right: 1.2rem; bottom: 1.2rem; }
+        .evidence-flow, .batch-map { grid-template-columns: 1fr; }
+        .evidence-flow::before, .evidence-flow::after, .flow-dot { display: none; }
+        .flow-step { padding-top: 0; }
     }
+    @media (prefers-reduced-motion: reduce) { .evidence-flow::after, .flow-step.unresolved .flow-dot { animation: none; } }
     </style>
     """,
     unsafe_allow_html=True,
@@ -223,7 +260,7 @@ TRANSLATIONS["EN"].update({
     "sed_images_loaded": "Sedimentation images loaded", "micro_images_loaded": "Microbiology images loaded",
     "project": "Project", "degree": "Degree", "institution": "Institution", "instrumentation": "Instrumentation",
     "project_value": "Caipiringwer Stability Assessment", "degree_value": "MSc Biotechnology", "institution_value": "Hochschule Ansbach",
-    "top_executive": "🏠 Executive Summary", "top_rheology": "🧪 Rheology", "top_physchem": "🧃 Physicochemical", "top_sedimentation": "🟤 Sedimentation", "top_microbiology": "🦠 Microbiology", "top_references": "📚 References",
+    "top_executive": "🏠 Executive Summary", "top_rheology": "🧪 Rheology", "top_physchem": "🧃 Physicochemical", "top_sedimentation": "🟤 Sedimentation", "top_microbiology": "🦠 Microbiology", "top_references": "📚 References", "top_shelf_life": "⏳ Shelf-life evidence",
     "flow_curve": "Flow Curve", "amplitude_sweep": "Amplitude Sweep", "frequency_sweep": "Frequency Sweep", "interpretation": "Interpretation",
     "overview": "Overview", "composition": "Composition", "trends": "Trends", "correlations": "Correlations",
     "sed_images": "📷 Images", "sed_analysis": "📈 Analysis", "sed_interpretation": "🧠 Interpretation", "sed_references": "📚 References",
@@ -244,7 +281,7 @@ TRANSLATIONS["DE"].update({
     "sed_images_loaded": "Sedimentationsbilder geladen", "micro_images_loaded": "Mikrobiologiebilder geladen",
     "project": "Projekt", "degree": "Abschluss", "institution": "Institution", "instrumentation": "Instrumentierung",
     "project_value": "Caipiringwer-Stabilitätsbewertung", "degree_value": "MSc Biotechnologie", "institution_value": "Hochschule Ansbach",
-    "top_executive": "🏠 Managementübersicht", "top_rheology": "🧪 Rheologie", "top_physchem": "🧃 Physikochemie", "top_sedimentation": "🟤 Sedimentation", "top_microbiology": "🦠 Mikrobiologie", "top_references": "📚 Literatur",
+    "top_executive": "🏠 Managementübersicht", "top_rheology": "🧪 Rheologie", "top_physchem": "🧃 Physikochemie", "top_sedimentation": "🟤 Sedimentation", "top_microbiology": "🦠 Mikrobiologie", "top_references": "📚 Literatur", "top_shelf_life": "⏳ Haltbarkeitsevidenz",
     "flow_curve": "Fließkurve", "amplitude_sweep": "Amplitudensweep", "frequency_sweep": "Frequenzsweep", "interpretation": "Interpretation",
     "overview": "Übersicht", "composition": "Zusammensetzung", "trends": "Trends", "correlations": "Korrelationen",
     "sed_images": "📷 Bilder", "sed_analysis": "📈 Analyse", "sed_interpretation": "🧠 Interpretation", "sed_references": "📚 Literatur",
@@ -655,6 +692,8 @@ sample_overview["Manufacturing_Date"] = sample_overview["Manufacturing_Date"].dt
 
 hero_image_path = Path(__file__).resolve().parent / "images" / "caipiringwer-hero.png"
 hero_image_uri = image_data_uri(str(hero_image_path)) if hero_image_path.exists() else ""
+shelf_image_path = Path(__file__).resolve().parent / "images" / "shelf-life-evidence.png"
+shelf_image_uri = image_data_uri(str(shelf_image_path)) if shelf_image_path.exists() else ""
 
 st.markdown(
     f"""
@@ -764,7 +803,7 @@ chart_theme = go.layout.Template(
 
 top_tabs = st.tabs([
     T["top_executive"], T["top_rheology"], T["top_physchem"],
-    T["top_sedimentation"], T["top_microbiology"], T["top_references"],
+    T["top_sedimentation"], T["top_microbiology"], T["top_references"], T["top_shelf_life"],
 ])
 rheology_tabs = top_tabs[1].tabs([
     T["rheo_overview"], T["flow_curve"], T["amplitude_sweep"],
@@ -1688,6 +1727,164 @@ with rheology_tabs[6]:
             st.write(tr("Link to publication:", "Link zur Publikation:"), ref["publication_link"])
             st.write(tr("DOI / journal reference:", "DOI / Zeitschriftenreferenz:"), ref["doi"])
             st.write(tr("Relevance:", "Relevanz:"), ref["relevance"])
+
+with top_tabs[6]:
+    st.header(tr("Shelf-life evidence without unsupported extrapolation", "Haltbarkeitsevidenz ohne unbelegte Extrapolation"))
+    st.caption(tr(
+        "Two manufacturing batches were confirmed by the researcher as common across the four experiments. Original experiment-specific labels are retained; no cross-experiment identifier is created.",
+        "Zwei Herstellungslose wurden von der Forscherin als in allen vier Experimenten übereinstimmend bestätigt. Die ursprünglichen experimentbezogenen Bezeichnungen bleiben erhalten; es wird keine experimentübergreifende Kennung erzeugt.",
+    ))
+    st.markdown(
+        f"""
+        <div class="shelf-hero" style="background-image:url('{shelf_image_uri}')">
+            <div class="shelf-hero-copy">
+                <h2>{tr('Evidence can define an observation window—not an expiry date', 'Evidenz kann ein Beobachtungsfenster definieren – kein Verfallsdatum')}</h2>
+                <p>{tr('The animated evidence path stops deliberately before a shelf-life claim because quantitative microbiology, complete test dates, storage conditions, sensory acceptance criteria and a validated longitudinal study are not available.', 'Der animierte Evidenzpfad endet bewusst vor einer Haltbarkeitsaussage, da quantitative Mikrobiologie, vollständige Prüfzeitpunkte, Lagerbedingungen, sensorische Akzeptanzkriterien und eine validierte Längsschnittstudie fehlen.')}</p>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(tr("### Confirmed batch traceability", "### Bestätigte Los-Rückverfolgbarkeit"))
+    st.markdown(
+        f"""
+        <div class="batch-map">
+            <div class="batch-card">
+                <div class="batch-date">01.11.2024 · Standard Pasteurized</div>
+                <div class="batch-labels"><strong>{T['rheology']}:</strong> S1 / Sample 4<br><strong>{T['physicochemical']}:</strong> Sample 7<br><strong>{T['sedimentation']}:</strong> Sample G<br><strong>{T['microbiology']}:</strong> S6</div>
+            </div>
+            <div class="batch-card">
+                <div class="batch-date">04.12.2025 · Standard Pasteurized</div>
+                <div class="batch-labels"><strong>{T['rheology']}:</strong> S4 / Sample 16<br><strong>{T['physicochemical']}:</strong> Samples 1–3<br><strong>{T['sedimentation']}:</strong> Samples A–C<br><strong>{T['microbiology']}:</strong> S5</div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    selected_common_batch = st.selectbox(
+        tr("Inspect confirmed manufacturing batch", "Bestätigtes Herstellungslos untersuchen"),
+        ["01.11.2024 · Standard Pasteurized", "04.12.2025 · Standard Pasteurized"],
+        key="confirmed_batch_shelf_life",
+    )
+    batch_date_text = selected_common_batch.split(" · ")[0]
+    batch_date = pd.to_datetime(batch_date_text, dayfirst=True)
+    batch_iso_date = batch_date.strftime("%Y-%m-%d")
+    batch_rheo_sample = "S1" if batch_date_text == "01.11.2024" else "S4"
+    batch_physchem = physchem[
+        (physchem["Storage_Date"] == batch_date)
+        & physchem["Product_Type"].astype(str).str.contains("Standard", case=False, na=False)
+    ].copy()
+    batch_sedimentation = sed_df[
+        (sed_df["Manufacturing Date"] == batch_date_text)
+        & sed_df["Product Type"].astype(str).str.contains("Standard", case=False, na=False)
+    ].copy()
+    batch_microbiology = lims_microbiology[
+        lims_microbiology["Date_Parsed"].astype(str).eq(batch_iso_date)
+    ].copy()
+    batch_flow = flow[flow["Sample_Family"] == batch_rheo_sample]
+    flow_details, _ = power_law_model_details(batch_flow)
+    physicochemical_test_date = pd.Timestamp("2026-02-11")
+    documented_checkpoint_days = int((physicochemical_test_date - batch_date).days)
+    ph_min = pd.to_numeric(batch_physchem["pH"], errors="coerce").min()
+    ph_max = pd.to_numeric(batch_physchem["pH"], errors="coerce").max()
+    brix_mean = pd.to_numeric(batch_physchem["Brix_Avg"], errors="coerce").mean()
+    final_sed_min = pd.to_numeric(batch_sedimentation["Final sediment-bed fraction (%)"], errors="coerce").min()
+    final_sed_max = pd.to_numeric(batch_sedimentation["Final sediment-bed fraction (%)"], errors="coerce").max()
+    microbial_status = "; ".join(
+        f"{row['Medium']}: {row['Microbial_status']}"
+        for _, row in batch_microbiology.iterrows()
+    ) or tr("Not recorded", "Nicht dokumentiert")
+
+    shelf_kpis = st.columns(4)
+    shelf_kpis[0].metric(tr("Confirmed module match", "Bestätigte Modulübereinstimmung"), "4 / 4")
+    shelf_kpis[1].metric(
+        tr("Documented quality checkpoint", "Dokumentierter Qualitätszeitpunkt"),
+        f"{documented_checkpoint_days} {tr('days', 'Tage')}",
+        help=tr("Age at the physicochemical experiment on 11 February 2026; this is not a validated shelf life.", "Alter beim physikochemischen Versuch am 11. Februar 2026; dies ist keine validierte Haltbarkeit."),
+    )
+    shelf_kpis[2].metric("pH", f"{ph_min:.2f}" if ph_min == ph_max else f"{ph_min:.2f}–{ph_max:.2f}")
+    shelf_kpis[3].metric(tr("Mean soluble solids", "Mittlere lösliche Feststoffe"), f"{brix_mean:.2f} °Bx")
+
+    st.markdown(
+        f"""
+        <div class="evidence-flow">
+            <div class="flow-step"><span class="flow-dot"></span><div class="flow-card"><div class="flow-kicker">01 · MFD</div><div class="flow-title">{batch_date_text}</div><div class="flow-detail">{tr('Same batch confirmed by the researcher; local labels remain separate.', 'Dasselbe Los wurde von der Forscherin bestätigt; lokale Bezeichnungen bleiben getrennt.')}</div></div></div>
+            <div class="flow-step"><span class="flow-dot"></span><div class="flow-card"><div class="flow-kicker">02 · {tr('QUALITY CHECKPOINT', 'QUALITÄTSPRÜFPUNKT')}</div><div class="flow-title">{documented_checkpoint_days} {tr('days after manufacture', 'Tage nach Herstellung')}</div><div class="flow-detail">pH {ph_min:.2f}{'' if ph_min == ph_max else f'–{ph_max:.2f}'} · {brix_mean:.2f} °Bx · {tr('measured 11.02.2026', 'gemessen am 11.02.2026')}</div></div></div>
+            <div class="flow-step"><span class="flow-dot"></span><div class="flow-card"><div class="flow-kicker">03 · {tr('SUPPORTING EVIDENCE', 'ERGÄNZENDE EVIDENZ')}</div><div class="flow-title">{tr('Structure and microbiology', 'Struktur und Mikrobiologie')}</div><div class="flow-detail">{tr('Rheology and sedimentation are recorded, but complete test dates are absent. Microbiology is qualitative and its assay date is absent.', 'Rheologie und Sedimentation sind dokumentiert, jedoch fehlen vollständige Prüfzeitpunkte. Die Mikrobiologie ist qualitativ und ihr Untersuchungsdatum fehlt.')}</div></div></div>
+            <div class="flow-step unresolved"><span class="flow-dot"></span><div class="flow-card"><div class="flow-kicker">04 · {tr('DECISION', 'ENTSCHEIDUNG')}</div><div class="flow-title">{tr('Shelf life not established', 'Haltbarkeit nicht bestimmt')}</div><div class="flow-detail">{tr('The evidence chain stops here: no expiry or minimum durability duration is calculated.', 'Die Evidenzkette endet hier: Es wird weder ein Verfallsdatum noch eine Mindesthaltbarkeitsdauer berechnet.')}</div></div></div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    evidence_table = pd.DataFrame([
+        {
+            tr("Evidence domain", "Evidenzbereich"): T["physicochemical"],
+            tr("Recorded result", "Dokumentiertes Ergebnis"): f"pH {ph_min:.2f}" + ("" if ph_min == ph_max else f"–{ph_max:.2f}") + f"; Brix {brix_mean:.2f} °Bx",
+            tr("Time basis", "Zeitbasis"): f"11.02.2026 ({documented_checkpoint_days} {tr('days', 'Tage')})",
+            tr("Interpretive boundary", "Interpretationsgrenze"): tr("One checkpoint; no baseline trend or acceptance limit", "Ein Prüfpunkt; kein Ausgangstrend oder Akzeptanzgrenzwert"),
+        },
+        {
+            tr("Evidence domain", "Evidenzbereich"): T["sedimentation"],
+            tr("Recorded result", "Dokumentiertes Ergebnis"): f"{tr('Final sediment-bed fraction', 'Finaler Sedimentbettanteil')}: {final_sed_min:.1f}" + ("" if final_sed_min == final_sed_max else f"–{final_sed_max:.1f}") + "%",
+            tr("Time basis", "Zeitbasis"): tr("Two observation labels; year not structured", "Zwei Beobachtungsangaben; Jahr nicht strukturiert"),
+            tr("Interpretive boundary", "Interpretationsgrenze"): tr("No replicates, kinetics or redispersion endpoint", "Keine Replikate, Kinetik oder Redispergierbarkeits-Endpunkt"),
+        },
+        {
+            tr("Evidence domain", "Evidenzbereich"): T["rheology"],
+            tr("Recorded result", "Dokumentiertes Ergebnis"): f"n={flow_details['n']:.3f}; R²={flow_details['r2']:.3f}",
+            tr("Time basis", "Zeitbasis"): tr("Measurement date not recorded", "Messdatum nicht dokumentiert"),
+            tr("Interpretive boundary", "Interpretationsgrenze"): tr("Structural snapshot; descriptive fit only", "Strukturelle Momentaufnahme; nur deskriptive Anpassung"),
+        },
+        {
+            tr("Evidence domain", "Evidenzbereich"): T["microbiology"],
+            tr("Recorded result", "Dokumentiertes Ergebnis"): microbial_status,
+            tr("Time basis", "Zeitbasis"): tr("Assay/incubation date not recorded", "Untersuchungs-/Inkubationsdatum nicht dokumentiert"),
+            tr("Interpretive boundary", "Interpretationsgrenze"): tr("Qualitative status; no CFU/mL and no organism confirmation", "Qualitativer Status; keine KBE/mL und keine Organismenbestätigung"),
+        },
+    ])
+    st.dataframe(evidence_table, width="stretch", hide_index=True)
+
+    defensible_conclusion = tr(
+        f"The {batch_date_text} retained batch was still available for physicochemical measurement {documented_checkpoint_days} days after manufacture. That observation does not demonstrate microbiological safety, sensory acceptability, package integrity or shelf life through that day. Growth was recorded on the E. coli-selective medium, while the organism identity, count and assay date are not established. Therefore no shelf-life duration can be assigned from the present dataset.",
+        f"Das zurückbehaltene Los vom {batch_date_text} stand {documented_checkpoint_days} Tage nach der Herstellung noch für physikochemische Messungen zur Verfügung. Diese Beobachtung belegt weder mikrobiologische Sicherheit, sensorische Akzeptanz, Verpackungsintegrität noch Haltbarkeit bis zu diesem Tag. Auf dem E.-coli-Selektivmedium wurde Wachstum dokumentiert, während Organismenidentität, Keimzahl und Untersuchungsdatum nicht geklärt sind. Daher kann aus dem vorliegenden Datensatz keine Haltbarkeitsdauer abgeleitet werden.",
+    )
+    st.markdown(
+        f'<div class="decision-banner"><strong>{tr("Defensible conclusion:", "Vertretbare Schlussfolgerung:")}</strong> {defensible_conclusion}</div>',
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(tr("### Minimum evidence required before assigning shelf life", "### Mindestevidenz vor Festlegung einer Haltbarkeit"))
+    validation_requirements = pd.DataFrame([
+        [tr("Time axis", "Zeitachse"), tr("Record analysis date, storage temperature and package state at every interval.", "Analysezeitpunkt, Lagertemperatur und Verpackungszustand für jedes Intervall dokumentieren.")],
+        [tr("Microbiology", "Mikrobiologie"), tr("Quantitative total viable count and yeast/mould enumeration; confirm any target organism with a validated method.", "Quantitative Gesamtkeimzahl und Hefe-/Schimmelzählung; jeden Zielorganismus mit einer validierten Methode bestätigen.")],
+        [tr("Process", "Prozess"), tr("Document and validate pasteurization time/temperature and hygienic filling controls.", "Pasteurisierungszeit/-temperatur und hygienische Abfüllkontrollen dokumentieren und validieren.")],
+        [tr("Quality", "Qualität"), tr("Predefine sensory, chemical, colour, carbonation and physical-stability acceptance limits.", "Sensorische, chemische, farbliche, karbonisierungs- und physikalische Akzeptanzgrenzen vorab festlegen.")],
+        [tr("Study design", "Studiendesign"), tr("Use unopened replicate packages across the intended storage conditions and planned endpoint, with an appropriate safety margin.", "Ungeöffnete Replikatverpackungen über die vorgesehenen Lagerbedingungen und den geplanten Endpunkt mit angemessener Sicherheitsmarge untersuchen.")],
+    ], columns=[tr("Requirement", "Anforderung"), tr("Needed evidence", "Erforderliche Evidenz")])
+    st.dataframe(validation_requirements, width="stretch", hide_index=True)
+
+    st.markdown(tr("### Post-2020 scientific and regulatory basis", "### Wissenschaftliche und regulatorische Grundlage ab 2021"))
+    st.markdown(
+        tr(
+            "- **EFSA BIOHAZ Panel (2021).** Risk-based shelf-life decisions must consider intrinsic factors, processing, packaging and storage within the food-safety management system. [EFSA Journal 19(4):6510](https://doi.org/10.2903/j.efsa.2021.6510)\n"
+            "- **Tiencheu et al. (2021).** Lemon–ginger beverage work combined physicochemical, microbiological and sensory measurements; its formulation-specific results cannot be transferred as a Caipiringwer expiry date. [Heliyon 7:e07177](https://doi.org/10.1016/j.heliyon.2021.e07177)\n"
+            "- **Szczepańska et al. (2021).** A controlled apple-juice storage study measured microbial, rheological and physicochemical change repeatedly for up to 12 weeks, illustrating the longitudinal design needed for a shelf-life claim. [LWT 150:112038](https://doi.org/10.1016/j.lwt.2021.112038)\n"
+            "- **Li et al. (2021).** Cloudy mixed-juice quality research evaluated sedimentation and other quality changes during refrigerated storage, supporting physical stability as one endpoint rather than a proxy for microbial shelf life. [Current Research in Food Science](https://doi.org/10.1016/j.crfs.2021.09.002)\n"
+            "- **Prisacaru et al. (2023).** Ginger-containing juice research monitored physicochemical and microbiological characteristics during storage; differences in recipe, processing and storage prevent direct duration transfer. [Foods 12:1311](https://doi.org/10.3390/foods12061311)\n"
+            "- **Shiekh et al. (2024).** Pasteurized passion-fruit juice shelf life was determined from repeated yeast/mould measurements under defined refrigeration, not pH alone. [Foods 13:719](https://doi.org/10.3390/foods13050719)\n"
+            "- **ISO 4833-1:2013/Amd 1:2022.** Current amendment for aerobic colony enumeration at 30 °C. [ISO record](https://www.iso.org/standard/73329.html)",
+            "- **EFSA-BIOHAZ-Gremium (2021).** Risikobasierte Haltbarkeitsentscheidungen müssen intrinsische Faktoren, Verarbeitung, Verpackung und Lagerung im Lebensmittelsicherheitsmanagement berücksichtigen. [EFSA Journal 19(4):6510](https://doi.org/10.2903/j.efsa.2021.6510)\n"
+            "- **Tiencheu et al. (2021).** Die Arbeit zu einem Zitronen-Ingwer-Getränk kombinierte physikochemische, mikrobiologische und sensorische Messungen; die rezepturspezifischen Ergebnisse sind nicht als Caipiringwer-Verfallsdatum übertragbar. [Heliyon 7:e07177](https://doi.org/10.1016/j.heliyon.2021.e07177)\n"
+            "- **Szczepańska et al. (2021).** Eine kontrollierte Apfelsaftstudie erfasste mikrobiologische, rheologische und physikochemische Veränderungen wiederholt über bis zu zwölf Wochen und zeigt das für eine Haltbarkeitsaussage erforderliche Längsschnittdesign. [LWT 150:112038](https://doi.org/10.1016/j.lwt.2021.112038)\n"
+            "- **Li et al. (2021).** Die Qualitätsstudie zu trüben Mischsäften untersuchte Sedimentation und weitere Qualitätsänderungen während Kühllagerung und stützt physikalische Stabilität als einzelnen Endpunkt, nicht als Ersatz für mikrobiologische Haltbarkeit. [Current Research in Food Science](https://doi.org/10.1016/j.crfs.2021.09.002)\n"
+            "- **Prisacaru et al. (2023).** Forschung zu ingwerhaltigen Säften überwachte physikochemische und mikrobiologische Merkmale während der Lagerung; Unterschiede in Rezeptur, Verarbeitung und Lagerung verhindern eine direkte Übertragung der Dauer. [Foods 12:1311](https://doi.org/10.3390/foods12061311)\n"
+            "- **Shiekh et al. (2024).** Die Haltbarkeit pasteurisierten Passionsfruchtsafts wurde anhand wiederholter Hefe-/Schimmelmessungen unter definierter Kühllagerung bestimmt, nicht allein anhand des pH-Werts. [Foods 13:719](https://doi.org/10.3390/foods13050719)\n"
+            "- **ISO 4833-1:2013/Amd 1:2022.** Aktuelle Änderung zur aeroben Koloniezählung bei 30 °C. [ISO-Eintrag](https://www.iso.org/standard/73329.html)",
+        )
+    )
 
 with top_tabs[5]:
     st.header(T["literature_header"])
