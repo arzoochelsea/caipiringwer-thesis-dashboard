@@ -198,6 +198,48 @@ st.markdown(
     .process-stage span { color: #687e8d; font-size: .75rem; line-height: 1.4; }
     .analysis-banner { padding: 1.05rem 1.15rem; margin: .8rem 0 1.1rem; border-radius: 16px; border-left: 4px solid #188b91; background: linear-gradient(105deg, rgba(24,139,145,.10), rgba(255,255,255,.92)); color: #28465a; line-height: 1.55; }
     .analysis-banner strong { color: #0b6473; }
+    .bottle-story {
+        position: relative; min-height: 430px; overflow: hidden; margin: .6rem 0 1.2rem;
+        border-radius: 22px; border: 1px solid rgba(104,209,199,.22); background: #061c31;
+        box-shadow: 0 18px 48px rgba(6,34,54,.18); isolation: isolate;
+    }
+    .bottle-frame { position: absolute; inset: 0; background-size: cover; background-position: center; }
+    .bottle-frame.open {
+        opacity: 0; transform: scale(1.015);
+        animation: openBottleOnView linear both;
+        animation-timeline: view(); animation-range: entry 20% cover 62%;
+    }
+    @keyframes openBottleOnView { from { opacity: 0; transform: scale(1.015); } to { opacity: 1; transform: scale(1); } }
+    .bottle-story::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(3,18,34,.90) 0%, rgba(3,18,34,.68) 37%, rgba(3,18,34,.05) 72%); }
+    .bottle-story-copy { position: absolute; z-index: 2; left: 2.1rem; top: 50%; transform: translateY(-50%); max-width: 540px; color: white; }
+    .bottle-story-kicker { color: #79d8cf; font-size: .7rem; font-weight: 790; letter-spacing: .13em; text-transform: uppercase; }
+    .bottle-story-copy h2 { color: white !important; font-size: 2rem; line-height: 1.1; margin: .55rem 0 .75rem !important; }
+    .bottle-story-copy p { color: rgba(255,255,255,.78); font-size: .9rem; line-height: 1.55; max-width: 475px; }
+    .story-rail { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 1px; margin: 0 0 1.7rem; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: var(--line); }
+    .story-stage { padding: .9rem 1rem; background: rgba(255,255,255,.94); }
+    .story-stage span { display: block; color: #6f8797; font-size: .64rem; font-weight: 780; letter-spacing: .1em; text-transform: uppercase; }
+    .story-stage strong { display: block; color: #173e55; font-size: .86rem; margin-top: .25rem; }
+    .experiment-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: .9rem; margin: .8rem 0 1.4rem; }
+    .experiment-card {
+        position: relative; min-height: 205px; padding: 1.05rem; overflow: hidden;
+        border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.94);
+        box-shadow: 0 10px 28px rgba(14,53,78,.06);
+        animation: evidenceCardReveal linear both; animation-timeline: view(); animation-range: entry 10% cover 35%;
+    }
+    @keyframes evidenceCardReveal { from { opacity: .25; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    .experiment-card::before { content: ""; position: absolute; inset: 0 0 auto; height: 4px; background: var(--accent, #146c94); }
+    .experiment-period { color: #718797; font-size: .66rem; font-weight: 780; letter-spacing: .1em; text-transform: uppercase; }
+    .experiment-title { color: #123d55; font-size: 1.02rem; font-weight: 790; margin: .45rem 0 .25rem; }
+    .experiment-sample { color: #718797; font-size: .7rem; margin-bottom: .85rem; }
+    .experiment-result { color: #173e55; font-size: 1rem; font-weight: 760; line-height: 1.4; }
+    .experiment-method { color: #687e8d; font-size: .74rem; line-height: 1.45; margin-top: .55rem; }
+    .outcome-grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 1rem; margin: .8rem 0 1.2rem; }
+    .outcome-main, .outcome-side { border-radius: 18px; padding: 1.2rem; border: 1px solid var(--line); background: rgba(255,255,255,.94); }
+    .outcome-main { border-left: 5px solid #188b91; }
+    .outcome-label { color: #718797; font-size: .66rem; font-weight: 790; letter-spacing: .1em; text-transform: uppercase; }
+    .outcome-title { color: #123d55; font-size: 1.15rem; font-weight: 800; margin: .4rem 0 .55rem; }
+    .outcome-copy { color: #5f7687; font-size: .82rem; line-height: 1.55; }
+    .outcome-value { color: #0b6473; font-size: 2rem; font-weight: 820; margin: .35rem 0; }
 
     @media (max-width: 800px) {
         .block-container { padding: 1rem 1rem 3rem; }
@@ -205,14 +247,20 @@ st.markdown(
         .dashboard-hero::before { background: linear-gradient(180deg, rgba(4,19,37,.24) 0%, rgba(4,19,37,.52) 48%, rgba(4,19,37,.96) 76%); }
         .hero-title { font-size: 2rem; }
         [data-testid="stMetric"] { min-height: 100px; }
-        .audit-ribbon, .evidence-grid, .study-grid, .process-strip { grid-template-columns: 1fr 1fr; }
+        .audit-ribbon, .evidence-grid, .study-grid, .process-strip, .story-rail, .experiment-grid { grid-template-columns: 1fr 1fr; }
         .shelf-hero { min-height: 340px; background-position: 40% center; }
+        .bottle-story { min-height: 420px; }
+        .bottle-story-copy { left: 1.3rem; right: 1.3rem; top: auto; bottom: 1.2rem; transform: none; }
+        .bottle-story::after { background: linear-gradient(180deg, rgba(3,18,34,.08), rgba(3,18,34,.92)); }
+        .outcome-grid { grid-template-columns: 1fr; }
         .shelf-hero-copy { left: 1.2rem; right: 1.2rem; bottom: 1.2rem; }
         .evidence-flow, .batch-map { grid-template-columns: 1fr; }
         .evidence-flow::before, .evidence-flow::after, .flow-dot { display: none; }
         .flow-step { padding-top: 0; }
     }
-    @media (max-width: 520px) { .study-grid, .process-strip { grid-template-columns: 1fr; } }
+    @media (max-width: 520px) { .study-grid, .process-strip, .story-rail, .experiment-grid { grid-template-columns: 1fr; } }
+    @supports not (animation-timeline: view()) { .bottle-frame.open { animation: openBottleFallback 7s ease-in-out infinite alternate; } .experiment-card { animation: none; } }
+    @keyframes openBottleFallback { 0%,35% { opacity: 0; } 75%,100% { opacity: 1; } }
     @media (prefers-reduced-motion: reduce) { .evidence-flow::after, .flow-step.unresolved .flow-dot { animation: none; } }
     </style>
     """,
@@ -710,6 +758,8 @@ hero_image_path = Path(__file__).resolve().parent / "images" / "caipiringwer-her
 hero_image_uri = image_data_uri(str(hero_image_path)) if hero_image_path.exists() else ""
 shelf_image_path = Path(__file__).resolve().parent / "images" / "shelf-life-evidence.png"
 shelf_image_uri = image_data_uri(str(shelf_image_path)) if shelf_image_path.exists() else ""
+open_bottle_path = Path(__file__).resolve().parent / "images" / "caipiringwer-open-v2.png"
+open_bottle_uri = image_data_uri(str(open_bottle_path)) if open_bottle_path.exists() else hero_image_uri
 
 st.markdown(
     f"""
@@ -1745,37 +1795,61 @@ with rheology_tabs[6]:
             st.write(tr("Relevance:", "Relevanz:"), ref["relevance"])
 
 with top_tabs[6]:
-    st.header(tr("Batch-linked shelf-life assessment", "Losbezogene Haltbarkeitsbewertung"))
+    st.header(tr("From formulation to stability decision", "Von der Rezeptur zur Stabilitätsentscheidung"))
     st.caption(tr(
-        "Integrated review of rheological, physicochemical, sedimentation and microbiological measurements from the confirmed manufacturing batches.",
-        "Integrierte Auswertung rheologischer, physikochemischer, sedimentationsbezogener und mikrobiologischer Messungen der bestätigten Herstellungslose.",
+        "A structured evidence story connecting product composition, manufacturing conditions, confirmed batches, experiments and the resulting stability assessment.",
+        "Eine strukturierte Evidenzgeschichte, die Produktzusammensetzung, Herstellungsbedingungen, bestätigte Lose, Experimente und die daraus resultierende Stabilitätsbewertung verbindet.",
     ))
     st.markdown(
         f"""
-        <div class="shelf-hero" style="background-image:url('{shelf_image_uri}')">
-            <div class="shelf-hero-copy">
-                <h2>{tr('Integrated product stability assessment', 'Integrierte Bewertung der Produktstabilität')}</h2>
-                <p>{tr('Batch-linked analytical profile across the February–March 2026 study period.', 'Losbezogenes analytisches Profil für den Untersuchungszeitraum Februar–März 2026.')}</p>
+        <section class="bottle-story">
+            <div class="bottle-frame closed" style="background-image:url('{hero_image_uri}')"></div>
+            <div class="bottle-frame open" style="background-image:url('{open_bottle_uri}')"></div>
+            <div class="bottle-story-copy">
+                <div class="bottle-story-kicker">{tr('Integrated stability narrative', 'Integrierte Stabilitätsanalyse')}</div>
+                <h2>{tr('One product. Two batches. Four analytical perspectives.', 'Ein Produkt. Zwei Lose. Vier analytische Perspektiven.')}</h2>
+                <p>{tr('Scroll through the evidence chain from formulation and processing to the batch-level analytical outcome.', 'Folgen Sie der Evidenzkette von Rezeptur und Verarbeitung bis zum analytischen Ergebnis auf Losebene.')}</p>
             </div>
+        </section>
+        <div class="story-rail">
+            <div class="story-stage"><span>01</span><strong>{tr('Product & process', 'Produkt & Prozess')}</strong></div>
+            <div class="story-stage"><span>02</span><strong>{tr('Confirmed batches', 'Bestätigte Lose')}</strong></div>
+            <div class="story-stage"><span>03</span><strong>{tr('Experimental evidence', 'Experimentelle Evidenz')}</strong></div>
+            <div class="story-stage"><span>04</span><strong>{tr('Integrated outcome', 'Integriertes Ergebnis')}</strong></div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-    st.markdown(tr("### Study design", "### Studiendesign"))
+    st.markdown(tr("### 01 · Product composition and process conditions", "### 01 · Produktzusammensetzung und Prozessbedingungen"))
     st.markdown(
         f"""
         <div class="study-grid">
-            <div class="study-card"><div class="study-label">{tr('Study window', 'Untersuchungszeitraum')}</div><div class="study-value">{tr('February–March 2026', 'Februar–März 2026')}</div><div class="study-detail">{tr('Rheology and physicochemistry in February; microbiology and final sedimentation review in March.', 'Rheologie und Physikochemie im Februar; Mikrobiologie und finale Sedimentationsbewertung im März.')}</div></div>
-            <div class="study-card"><div class="study-label">{tr('Storage regime', 'Lagerungsregime')}</div><div class="study-value">{tr('Ambient conditions', 'Raumtemperatur')}</div><div class="study-detail">{tr('Both confirmed batches were assessed under the reported room-temperature storage regime.', 'Beide bestätigten Lose wurden unter dem angegebenen Raumtemperaturregime bewertet.')}</div></div>
-            <div class="study-card"><div class="study-label">{tr('Thermal process', 'Thermischer Prozess')}</div><div class="study-value">85 °C × 15 min</div><div class="study-detail">{tr('Final treatment in the RATIONAL ClimaPlus Combi® CPC.', 'Abschließende Behandlung im RATIONAL ClimaPlus Combi® CPC.')}</div></div>
-            <div class="study-card"><div class="study-label">{tr('Production control', 'Prozesskontrolle')}</div><div class="study-value">{tr('Homogenised filling', 'Homogenisierte Abfüllung')}</div><div class="study-detail">{tr('Stick-blender treatment and repeated mixing applied to both batches.', 'Stabmixerbehandlung und wiederholtes Durchmischen bei beiden Losen.')}</div></div>
+            <div class="study-card"><div class="study-label">{tr('Composition', 'Zusammensetzung')}</div><div class="study-value">{tr('Ginger · lime · Cachaça', 'Ingwer · Limette · Cachaça')}</div><div class="study-detail">{tr('Water and sugar form the beverage base; ginger and lime define the dispersed acidic system.', 'Wasser und Zucker bilden die Getränkebasis; Ingwer und Limette definieren das disperse saure System.')}</div></div>
+            <div class="study-card"><div class="study-label">{tr('Primary heating', 'Primärerhitzung')}</div><div class="study-value">90–100 °C · 4 min</div><div class="study-detail">{tr('Controlled heating of the lime-containing mixture before Cachaça addition.', 'Kontrollierte Erhitzung der limettenhaltigen Mischung vor der Cachaça-Zugabe.')}</div></div>
+            <div class="study-card"><div class="study-label">{tr('Final treatment', 'Abschließende Behandlung')}</div><div class="study-value">85 °C × 15 min</div><div class="study-detail">{tr('Treatment in the RATIONAL ClimaPlus Combi® CPC after filling.', 'Behandlung im RATIONAL ClimaPlus Combi® CPC nach der Abfüllung.')}</div></div>
+            <div class="study-card"><div class="study-label">{tr('Study conditions', 'Untersuchungsbedingungen')}</div><div class="study-value">{tr('Ambient · Feb–Mar 2026', 'Raumtemperatur · Feb–Mär 2026')}</div><div class="study-detail">{tr('Homogenised filling and repeated mixing applied to both confirmed batches.', 'Homogenisierte Abfüllung und wiederholtes Durchmischen bei beiden bestätigten Losen.')}</div></div>
         </div>
         """,
         unsafe_allow_html=True,
     )
+    st.markdown(
+        f"""
+        <div class="process-strip">
+            <div class="process-stage"><strong>01 · {tr('Thermal extraction', 'Thermische Extraktion')}</strong><span>{tr('Lime-containing mixture at 90–100 °C for four minutes.', 'Limettenhaltige Mischung vier Minuten bei 90–100 °C.')}</span></div>
+            <div class="process-stage"><strong>02 · {tr('Homogenisation', 'Homogenisierung')}</strong><span>{tr('Stick-blender treatment after ginger addition.', 'Stabmixerbehandlung nach der Ingwerzugabe.')}</span></div>
+            <div class="process-stage"><strong>03 · {tr('Controlled filling', 'Kontrollierte Abfüllung')}</strong><span>{tr('Cachaça addition followed by repeated mixing during 200 mL filling.', 'Cachaça-Zugabe mit wiederholtem Durchmischen bei der 200-ml-Abfüllung.')}</span></div>
+            <div class="process-stage"><strong>04 · {tr('Final treatment', 'Abschließende Behandlung')}</strong><span>85 °C × 15 min · RATIONAL ClimaPlus Combi® CPC</span></div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    st.caption(tr(
+        "Bennani (2025) reported uniform visual appearance in the 200 mL bottles after two weeks. The optimized process was confirmed for both manufacturing batches displayed below.",
+        "Bennani (2025) dokumentierte nach zwei Wochen ein einheitliches visuelles Erscheinungsbild der 200-ml-Flaschen. Der optimierte Prozess wurde für beide unten dargestellten Herstellungslose bestätigt.",
+    ))
 
-    st.markdown(tr("### Batch traceability", "### Los-Rückverfolgbarkeit"))
+    st.markdown(tr("### 02 · Confirmed batch traceability", "### 02 · Bestätigte Los-Rückverfolgbarkeit"))
     st.markdown(
         f"""
         <div class="batch-map">
@@ -1829,66 +1903,41 @@ with top_tabs[6]:
     approximate_age = tr(f"~{approximate_age_months} months", f"ca. {approximate_age_months} Monate")
     sediment_result = f"{final_sed_min:.1f}%" if final_sed_min == final_sed_max else f"{final_sed_min:.1f}–{final_sed_max:.1f}%"
 
+    rheology_sample = "S1 / Sample 4" if batch_date_text == "01.11.2024" else "S4 / Sample 16"
+    physicochemical_sample = tr("Sample 7", "Probe 7") if batch_date_text == "01.11.2024" else tr("Samples 1–3", "Proben 1–3")
+    sedimentation_sample = tr("Sample G", "Probe G") if batch_date_text == "01.11.2024" else tr("Samples A–C", "Proben A–C")
+    microbiology_sample = "S6" if batch_date_text == "01.11.2024" else "S5"
+
+    st.markdown(tr("### 03 · Experimental evidence", "### 03 · Experimentelle Evidenz"))
+    st.caption(tr(
+        "All analytical periods are presented at the same study-level precision for a coherent comparison.",
+        "Alle Analysezeiträume werden für einen konsistenten Vergleich mit derselben studienbezogenen Genauigkeit dargestellt.",
+    ))
+    st.markdown(
+        f"""
+        <div class="experiment-grid">
+            <div class="experiment-card" style="--accent:#146c94"><div class="experiment-period">{tr('February 2026', 'Februar 2026')}</div><div class="experiment-title">{T['rheology']}</div><div class="experiment-sample">{rheology_sample}</div><div class="experiment-result">n = {flow_details['n']:.3f}<br>R² = {flow_details['r2']:.3f}</div><div class="experiment-method">{tr('Descriptive power-law flow profile.', 'Deskriptives Potenzgesetz-Fließprofil.')}</div></div>
+            <div class="experiment-card" style="--accent:#1c8ea1"><div class="experiment-period">{tr('February 2026', 'Februar 2026')}</div><div class="experiment-title">{T['physicochemical']}</div><div class="experiment-sample">{physicochemical_sample}</div><div class="experiment-result">pH {ph_min:.2f}{'' if ph_min == ph_max else f'–{ph_max:.2f}'}<br>{brix_mean:.2f} °Bx</div><div class="experiment-method">{tr('Acidity and soluble-solids profile.', 'Säure- und lösliches-Feststoff-Profil.')}</div></div>
+            <div class="experiment-card" style="--accent:#68b7a7"><div class="experiment-period">{tr('February–March 2026', 'Februar–März 2026')}</div><div class="experiment-title">{T['sedimentation']}</div><div class="experiment-sample">{sedimentation_sample}</div><div class="experiment-result">{sediment_result}</div><div class="experiment-method">{tr('Final measured sediment fraction.', 'Final gemessener Sedimentanteil.')}</div></div>
+            <div class="experiment-card" style="--accent:#d0a34a"><div class="experiment-period">{tr('Early March 2026', 'Anfang März 2026')}</div><div class="experiment-title">{T['microbiology']}</div><div class="experiment-sample">{microbiology_sample}</div><div class="experiment-result">{microbial_status}</div><div class="experiment-method">{tr('Qualitative plate assessment.', 'Qualitative Plattenbewertung.')}</div></div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(tr("### 04 · Integrated outcome", "### 04 · Integriertes Ergebnis"))
     shelf_kpis = st.columns(4)
-    shelf_kpis[0].metric(tr("Approx. batch age", "Ungefähres Losalter"), approximate_age)
+    shelf_kpis[0].metric(tr("Approx. assessment age", "Ungefähres Bewertungsalter"), approximate_age)
     shelf_kpis[1].metric("pH", f"{ph_min:.2f}" if ph_min == ph_max else f"{ph_min:.2f}–{ph_max:.2f}")
     shelf_kpis[2].metric(tr("Soluble solids", "Lösliche Feststoffe"), f"{brix_mean:.2f} °Bx")
     shelf_kpis[3].metric(tr("Final sediment fraction", "Finaler Sedimentanteil"), sediment_result)
-
-    st.markdown(tr("### Analytical timeline", "### Analytischer Zeitplan"))
-    timeline_data = pd.DataFrame([
-        [T["rheology"], pd.Timestamp("2026-02-01"), pd.Timestamp("2026-03-01"), tr("February 2026", "Februar 2026")],
-        [T["physicochemical"], pd.Timestamp("2026-02-11"), pd.Timestamp("2026-02-12"), "11.02.2026"],
-        [T["sedimentation"], pd.Timestamp("2026-02-11"), pd.Timestamp("2026-03-12"), tr("11 February–11 March 2026", "11. Februar–11. März 2026")],
-        [T["microbiology"], pd.Timestamp("2026-03-01"), pd.Timestamp("2026-03-08"), tr("Early March 2026", "Anfang März 2026")],
-    ], columns=[tr("Analysis", "Analyse"), "Start", "Finish", tr("Study period", "Untersuchungszeitraum")])
-    timeline_analysis_col = tr("Analysis", "Analyse")
-    timeline_period_col = tr("Study period", "Untersuchungszeitraum")
-    timeline_figure = px.timeline(
-        timeline_data,
-        x_start="Start",
-        x_end="Finish",
-        y=timeline_analysis_col,
-        color=timeline_analysis_col,
-        hover_name=timeline_analysis_col,
-        hover_data={"Start": False, "Finish": False, timeline_period_col: True},
-        color_discrete_sequence=["#146c94", "#1c8ea1", "#68b7a7", "#d0a34a"],
-    )
-    timeline_figure.update_yaxes(autorange="reversed", title="")
-    timeline_figure.update_xaxes(title="", tickformat="%d %b", range=[pd.Timestamp("2026-01-29"), pd.Timestamp("2026-03-15")], showgrid=True, gridcolor="rgba(105,133,150,.14)")
-    timeline_figure.update_layout(template=chart_theme, height=300, margin=dict(l=10, r=15, t=15, b=30), showlegend=False, hoverlabel=dict(bgcolor="white"))
-    st.plotly_chart(timeline_figure, width="stretch", config={"displayModeBar": False})
-
-    evidence_table = pd.DataFrame([
-        {
-            tr("Analysis", "Analyse"): T["physicochemical"],
-            tr("Period", "Zeitraum"): "11.02.2026",
-            tr("Sample coverage", "Probenumfang"): tr("Sample 7", "Probe 7") if batch_date_text == "01.11.2024" else tr("Samples 1–3", "Proben 1–3"),
-            tr("Analytical result", "Analytisches Ergebnis"): f"pH {ph_min:.2f}" + ("" if ph_min == ph_max else f"–{ph_max:.2f}") + f" · {brix_mean:.2f} °Bx",
-        },
-        {
-            tr("Analysis", "Analyse"): T["sedimentation"],
-            tr("Period", "Zeitraum"): tr("February–March 2026", "Februar–März 2026"),
-            tr("Sample coverage", "Probenumfang"): tr("Sample G", "Probe G") if batch_date_text == "01.11.2024" else tr("Samples A–C", "Proben A–C"),
-            tr("Analytical result", "Analytisches Ergebnis"): f"{tr('Final sediment fraction', 'Finaler Sedimentanteil')} {sediment_result}",
-        },
-        {
-            tr("Analysis", "Analyse"): T["rheology"],
-            tr("Period", "Zeitraum"): tr("February 2026", "Februar 2026"),
-            tr("Sample coverage", "Probenumfang"): "S1 / Sample 4" if batch_date_text == "01.11.2024" else "S4 / Sample 16",
-            tr("Analytical result", "Analytisches Ergebnis"): f"n={flow_details['n']:.3f} · R²={flow_details['r2']:.3f}",
-        },
-        {
-            tr("Analysis", "Analyse"): T["microbiology"],
-            tr("Period", "Zeitraum"): tr("Early March 2026", "Anfang März 2026"),
-            tr("Sample coverage", "Probenumfang"): "S6" if batch_date_text == "01.11.2024" else "S5",
-            tr("Analytical result", "Analytisches Ergebnis"): microbial_status,
-        },
-    ])
-    st.dataframe(evidence_table, width="stretch", hide_index=True)
-
     st.markdown(
-        f'<div class="analysis-banner"><strong>{tr("Integrated batch profile", "Integriertes Losprofil")}</strong><br>{tr("The selected batch was assessed at an approximate age of", "Das ausgewählte Los wurde in einem ungefähren Alter von")} {approximate_age}. {tr("The dashboard combines physicochemical composition, sedimentation, rheology and qualitative microbiology into one traceable analytical record.", "Das Dashboard verbindet physikochemische Zusammensetzung, Sedimentation, Rheologie und qualitative Mikrobiologie zu einem rückverfolgbaren analytischen Datensatz.")}</div>',
+        f"""
+        <div class="outcome-grid">
+            <div class="outcome-main"><div class="outcome-label">{tr('Evidence-supported result', 'Evidenzgestütztes Ergebnis')}</div><div class="outcome-title">{tr('Batch characterisation consolidated across four analytical domains', 'Loscharakterisierung über vier analytische Bereiche konsolidiert')}</div><div class="outcome-copy">{tr('The selected manufacturing batch is traceably connected to rheological, physicochemical, sedimentation and qualitative microbiological observations from the February–March 2026 study. The result is a consolidated stability profile, not an inferred expiry date.', 'Das ausgewählte Herstellungslose ist rückverfolgbar mit rheologischen, physikochemischen, sedimentationsbezogenen und qualitativen mikrobiologischen Beobachtungen der Studie Februar–März 2026 verknüpft. Das Ergebnis ist ein konsolidiertes Stabilitätsprofil, kein abgeleitetes Verfallsdatum.')}</div></div>
+            <div class="outcome-side"><div class="outcome-label">{tr('Current evidence output', 'Aktuelles Evidenzergebnis')}</div><div class="outcome-value">{tr('Stability profile', 'Stabilitätsprofil')}</div><div class="outcome-copy">{tr('A numerical market shelf life is the next validation phase and requires repeated quantitative microbial and sensory measurements.', 'Eine numerische Markt-Haltbarkeit ist die nächste Validierungsphase und erfordert wiederholte quantitative mikrobiologische und sensorische Messungen.')}</div></div>
+        </div>
+        """,
         unsafe_allow_html=True,
     )
 
@@ -1902,23 +1951,6 @@ with top_tabs[6]:
             [tr("Statistical design", "Statistisches Design"), tr("Assess unopened replicate packages from independent production batches at each interval.", "Ungeöffnete Replikatverpackungen unabhängiger Produktionslose bei jedem Intervall untersuchen.")],
         ], columns=[tr("Work package", "Arbeitspaket"), tr("Proposed design", "Vorgeschlagenes Design")])
         st.dataframe(validation_requirements, width="stretch", hide_index=True)
-
-    st.markdown(tr("### Confirmed production pathway", "### Bestätigter Herstellungsablauf"))
-    st.markdown(
-        f"""
-        <div class="process-strip">
-            <div class="process-stage"><strong>01 · {tr('Thermal extraction', 'Thermische Extraktion')}</strong><span>{tr('Lime-containing mixture at 90–100 °C for four minutes.', 'Limettenhaltige Mischung vier Minuten bei 90–100 °C.')}</span></div>
-            <div class="process-stage"><strong>02 · {tr('Homogenisation', 'Homogenisierung')}</strong><span>{tr('Stick-blender treatment after ginger addition.', 'Stabmixerbehandlung nach der Ingwerzugabe.')}</span></div>
-            <div class="process-stage"><strong>03 · {tr('Controlled filling', 'Kontrollierte Abfüllung')}</strong><span>{tr('Cachaça addition followed by repeated mixing during 200 mL filling.', 'Cachaça-Zugabe mit wiederholtem Durchmischen bei der 200-ml-Abfüllung.')}</span></div>
-            <div class="process-stage"><strong>04 · {tr('Final treatment', 'Abschließende Behandlung')}</strong><span>85 °C × 15 min · RATIONAL ClimaPlus Combi® CPC</span></div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    st.caption(tr(
-        "Bennani (2025) reported uniform visual appearance in the 200 mL bottles after two weeks. The optimized process was confirmed for both manufacturing batches displayed in this dashboard.",
-        "Bennani (2025) dokumentierte nach zwei Wochen ein einheitliches visuelles Erscheinungsbild der 200-ml-Flaschen. Der optimierte Prozess wurde für beide in diesem Dashboard dargestellten Herstellungslose bestätigt.",
-    ))
 
     with st.expander(tr("Scientific basis and source traceability", "Wissenschaftliche Grundlage und Quellenrückverfolgung")):
         st.markdown(tr(
