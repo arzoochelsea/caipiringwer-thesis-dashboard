@@ -124,11 +124,34 @@ st.markdown(
     .moderate { background: rgba(217,170,82,.16); color: #916517; }
     .poor { background: rgba(209,76,86,.13); color: #a4323c; }
 
+    .audit-ribbon {
+        display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px;
+        margin: -.35rem 0 1.5rem; overflow: hidden; border: 1px solid var(--line);
+        border-radius: 16px; background: var(--line); box-shadow: 0 10px 28px rgba(14,53,78,.05);
+    }
+    .audit-item { padding: .82rem 1rem; background: rgba(255,255,255,.88); }
+    .audit-label { color: #7b8d9b; font-size: .66rem; font-weight: 760; letter-spacing: .1em; text-transform: uppercase; }
+    .audit-value { color: #173b50; font-size: .88rem; font-weight: 690; margin-top: .18rem; }
+    .evidence-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: .85rem; margin: .85rem 0 1.6rem; }
+    .evidence-card {
+        position: relative; overflow: hidden; min-height: 168px; padding: 1.1rem 1.05rem 1rem;
+        border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.9);
+        box-shadow: 0 12px 32px rgba(14,53,78,.06);
+    }
+    .evidence-card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--card-accent, var(--blue)); }
+    .evidence-index { color: #8aa0ad; font-size: .68rem; font-weight: 780; letter-spacing: .12em; }
+    .evidence-name { color: #15394f; font-size: 1rem; font-weight: 760; margin: .3rem 0 .5rem; }
+    .evidence-detail { color: #63798a; font-size: .78rem; line-height: 1.45; }
+    .evidence-status { display: inline-flex; align-items: center; gap: .35rem; margin-top: .75rem; color: #24675f; font-size: .72rem; font-weight: 720; }
+    .evidence-status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #36a88e; box-shadow: 0 0 0 4px rgba(54,168,142,.12); }
+    .governance-note { padding: 1rem 1.1rem; border-radius: 16px; border: 1px solid rgba(217,170,82,.24); background: linear-gradient(110deg, rgba(217,170,82,.10), rgba(255,255,255,.72)); color: #564624; font-size: .86rem; line-height: 1.6; }
+
     @media (max-width: 800px) {
         .block-container { padding: 1rem 1rem 3rem; }
         .dashboard-hero { padding: 1.55rem 1.3rem; border-radius: 20px; }
         .hero-title { font-size: 2rem; }
         [data-testid="stMetric"] { min-height: 100px; }
+        .audit-ribbon, .evidence-grid { grid-template-columns: 1fr 1fr; }
     }
     </style>
     """,
@@ -631,6 +654,17 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+st.markdown(
+    f"""
+    <div class="audit-ribbon">
+        <div class="audit-item"><div class="audit-label">{tr('Evidence model', 'Evidenzmodell')}</div><div class="audit-value">{tr('Measured + derived', 'Gemessen + abgeleitet')}</div></div>
+        <div class="audit-item"><div class="audit-label">{tr('Analytical scope', 'Analytischer Umfang')}</div><div class="audit-value">4 {tr('independent modules', 'unabhängige Module')}</div></div>
+        <div class="audit-item"><div class="audit-label">{tr('Traceability', 'Rückverfolgbarkeit')}</div><div class="audit-value">{tr('Source-level identifiers retained', 'Quellkennungen beibehalten')}</div></div>
+        <div class="audit-item"><div class="audit-label">{tr('Statistical policy', 'Statistische Richtlinie')}</div><div class="audit-value">{tr('No unsupported joins', 'Keine unbelegten Verknüpfungen')}</div></div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 with st.sidebar:
     st.markdown(
@@ -665,6 +699,35 @@ with st.sidebar:
         f"**{T['degree']}:** {T['degree_value']}\n\n"
         f"**{T['institution']}:** {T['institution_value']}\n\n"
         f"**{T['instrumentation']}:** Kinexus Prime Lab+ · EasyDens · SmartRef"
+    )
+    st.divider()
+    st.subheader(tr("Report controls", "Berichtssteuerung"))
+    visual_density = st.radio(
+        tr("Visual density", "Darstellungsdichte"),
+        [tr("Comfortable", "Komfortabel"), tr("Compact", "Kompakt")],
+        horizontal=True,
+        key="visual_density",
+    )
+    show_methodology = st.toggle(
+        tr("Show methodology matrix", "Methodenmatrix anzeigen"),
+        value=True,
+        help=tr(
+            "Displays an audit-oriented overview of evidence type, replication, and limitations.",
+            "Zeigt eine auditierbare Übersicht zu Evidenztyp, Replikation und Limitationen.",
+        ),
+    )
+
+if visual_density == tr("Compact", "Kompakt"):
+    st.markdown(
+        """
+        <style>
+        .block-container { max-width: 1580px; }
+        [data-testid="stMetric"] { min-height: 96px; padding: .8rem .9rem; }
+        [data-testid="stPlotlyChart"] { padding: .35rem; }
+        .stTabs [data-baseweb="tab"] { height: 2.35rem; }
+        </style>
+        """,
+        unsafe_allow_html=True,
     )
 
 chart_theme = go.layout.Template(
@@ -1058,6 +1121,37 @@ top_tabs[0].header(T["executive_project"])
 top_tabs[0].markdown(T["subtitle"])
 top_tabs[0].markdown(f"### {T['study_architecture']}")
 top_tabs[0].write(tr("Four independent analytical modules contribute complementary evidence. Integration is limited to high-level narrative interpretation.", "Vier unabhängige Analysemodule liefern sich ergänzende Erkenntnisse. Die Integration beschränkt sich auf eine übergeordnete narrative Interpretation."))
+top_tabs[0].markdown(
+    f"""
+    <div class="evidence-grid">
+        <div class="evidence-card" style="--card-accent:#146c94">
+            <div class="evidence-index">01 · {tr('STRUCTURE', 'STRUKTUR')}</div>
+            <div class="evidence-name">{T['rheology']}</div>
+            <div class="evidence-detail">{tr('Flow, amplitude and frequency response with replicate-aware sample identities.', 'Fließ-, Amplituden- und Frequenzantwort mit replikatbezogenen Probenkennungen.')}</div>
+            <div class="evidence-status">{tr('Quantitative evidence', 'Quantitative Evidenz')}</div>
+        </div>
+        <div class="evidence-card" style="--card-accent:#2fa7b8">
+            <div class="evidence-index">02 · {tr('COMPOSITION', 'ZUSAMMENSETZUNG')}</div>
+            <div class="evidence-name">{T['physicochemical']}</div>
+            <div class="evidence-detail">{tr('Measured pH, density, Brix and composition-related endpoints.', 'Gemessene Endpunkte zu pH, Dichte, Brix und Zusammensetzung.')}</div>
+            <div class="evidence-status">{tr('Workbook traceable', 'Arbeitsmappe rückverfolgbar')}</div>
+        </div>
+        <div class="evidence-card" style="--card-accent:#d9aa52">
+            <div class="evidence-index">03 · {tr('PHYSICAL STATE', 'PHYSIKALISCHER ZUSTAND')}</div>
+            <div class="evidence-name">{T['sedimentation']}</div>
+            <div class="evidence-detail">{tr('Direct graduated-cylinder observations at two documented time points.', 'Direkte Messzylinderbeobachtungen zu zwei dokumentierten Zeitpunkten.')}</div>
+            <div class="evidence-status">{tr('Descriptive evidence', 'Deskriptive Evidenz')}</div>
+        </div>
+        <div class="evidence-card" style="--card-accent:#68a67d">
+            <div class="evidence-index">04 · {tr('PRODUCT SAFETY', 'PRODUKTSICHERHEIT')}</div>
+            <div class="evidence-name">{T['microbiology']}</div>
+            <div class="evidence-detail">{tr('Qualitative LIMS outcomes supported by representative plate images.', 'Qualitative LIMS-Ergebnisse, ergänzt durch repräsentative Plattenbilder.')}</div>
+            <div class="evidence-status">{tr('Qualitative evidence', 'Qualitative Evidenz')}</div>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 summary_kpis = top_tabs[0].columns(3)
 summary_kpis[0].metric(tr("Analytical modules", "Analysemodule"), 4)
 summary_kpis[1].metric(tr("Rheology sample families", "Rheologische Probenfamilien"), sample_overview["Sample_ID"].nunique())
@@ -1066,6 +1160,42 @@ summary_kpis = top_tabs[0].columns(3)
 summary_kpis[0].metric(tr("Sedimentation samples", "Sedimentationsproben"), 7)
 summary_kpis[1].metric(tr("Microbiology beverage systems", "Mikrobiologische Getränkesysteme"), lims_microbiology["Sample"].nunique() if not lims_microbiology.empty else T["not_loaded"])
 summary_kpis[2].metric(tr("Total microbiological plates processed", "Verarbeitete mikrobiologische Platten insgesamt"), "156")
+
+if show_methodology:
+    top_tabs[0].markdown(tr("### Evidence and methodology matrix", "### Evidenz- und Methodenmatrix"))
+    methodology_matrix = pd.DataFrame([
+        {
+            tr("Module", "Modul"): T["rheology"],
+            tr("Evidence basis", "Evidenzbasis"): tr("Instrumental measurements + derived parameters", "Instrumentelle Messungen + abgeleitete Parameter"),
+            tr("Replication", "Replikation"): tr("Retained in metadata", "In Metadaten beibehalten"),
+            tr("Primary limitation", "Zentrale Limitation"): tr("Model parameters remain range-specific", "Modellparameter bleiben messbereichsspezifisch"),
+        },
+        {
+            tr("Module", "Modul"): T["physicochemical"],
+            tr("Evidence basis", "Evidenzbasis"): tr("Measured workbook endpoints", "Gemessene Arbeitsmappen-Endpunkte"),
+            tr("Replication", "Replikation"): tr("As recorded in source", "Wie in der Quelle dokumentiert"),
+            tr("Primary limitation", "Zentrale Limitation"): tr("No unverified cross-module matching", "Keine ungeprüfte modulübergreifende Zuordnung"),
+        },
+        {
+            tr("Module", "Modul"): T["sedimentation"],
+            tr("Evidence basis", "Evidenzbasis"): tr("Two direct volume observations", "Zwei direkte Volumenbeobachtungen"),
+            tr("Replication", "Replikation"): tr("Not available", "Nicht verfügbar"),
+            tr("Primary limitation", "Zentrale Limitation"): tr("No kinetic or inferential modelling", "Keine kinetische oder inferenzstatistische Modellierung"),
+        },
+        {
+            tr("Module", "Modul"): T["microbiology"],
+            tr("Evidence basis", "Evidenzbasis"): tr("Qualitative LIMS audit", "Qualitatives LIMS-Audit"),
+            tr("Replication", "Replikation"): tr("Plate total documented; identifier absent", "Plattenzahl dokumentiert; Kennung fehlt"),
+            tr("Primary limitation", "Zentrale Limitation"): tr("No CFU/mL inference from images", "Keine KBE/mL-Ableitung aus Bildern"),
+        },
+    ])
+    top_tabs[0].dataframe(methodology_matrix, width="stretch", hide_index=True)
+
+top_tabs[0].markdown(
+    f'<div class="governance-note"><strong>{tr("Scientific governance:", "Wissenschaftliche Governance:")}</strong> '
+    f'{tr("Measured observations, derived calculations, literature-supported interpretation and hypotheses are kept conceptually distinct. This separation supports examination-level traceability and prevents visual presentation from overstating evidential strength.", "Gemessene Beobachtungen, abgeleitete Berechnungen, literaturgestützte Interpretation und Hypothesen werden konzeptionell getrennt. Diese Trennung unterstützt die prüfungsrelevante Rückverfolgbarkeit und verhindert, dass die visuelle Darstellung die Evidenzstärke überzeichnet.")}</div>',
+    unsafe_allow_html=True,
+)
 top_tabs[0].markdown(f"### {T['integrated_conclusion']}")
 top_tabs[0].write(tr("The dashboard presents module-specific measured evidence without merging experimental identifiers or performing cross-module statistical comparisons.", "Das Dashboard stellt modulspezifische Messdaten dar, ohne experimentelle Kennungen zusammenzuführen oder modulübergreifende statistische Vergleiche durchzuführen."))
 top_tabs[0].info(T["data_integrity"])
