@@ -16,36 +16,119 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    .stApp { background: linear-gradient(180deg, #f4f7fb 0%, #eef3f9 100%); }
-    .block-container { padding-top: 1rem; }
+    :root {
+        --ink: #132238;
+        --muted: #64748b;
+        --navy: #0b2942;
+        --blue: #146c94;
+        --cyan: #2fa7b8;
+        --aqua: #68d1c7;
+        --gold: #d9aa52;
+        --line: rgba(17, 67, 98, 0.12);
+        --surface: rgba(255, 255, 255, 0.92);
+        --shadow: 0 18px 50px rgba(14, 53, 78, 0.09);
+    }
+
+    html, body, [class*="css"] { font-family: Inter, "Segoe UI", Arial, sans-serif; }
+    .stApp {
+        color: var(--ink);
+        background:
+            radial-gradient(circle at 88% 4%, rgba(104, 209, 199, 0.16), transparent 26rem),
+            radial-gradient(circle at 20% 28%, rgba(20, 108, 148, 0.08), transparent 30rem),
+            #f4f8fa;
+    }
+    .block-container { max-width: 1480px; padding: 2rem 2.6rem 5rem; }
+    #MainMenu, footer { visibility: hidden; }
+    header[data-testid="stHeader"] { background: rgba(244, 248, 250, 0.78); backdrop-filter: blur(18px); }
+
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #0a263d 0%, #0d354e 58%, #0c4054 100%);
+        border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    [data-testid="stSidebar"] > div:first-child { padding: 1.4rem 1.15rem; }
+    [data-testid="stSidebar"] * { color: rgba(255,255,255,0.90); }
+    [data-testid="stSidebar"] hr { border-color: rgba(255,255,255,0.12); }
+    [data-testid="stSidebar"] [data-baseweb="select"] > div {
+        background: rgba(255,255,255,0.10);
+        border: 1px solid rgba(255,255,255,0.18);
+        border-radius: 12px;
+    }
+    .brand-lockup { padding: .35rem .15rem 1rem; }
+    .brand-mark {
+        width: 46px; height: 46px; display: grid; place-items: center;
+        border-radius: 14px; margin-bottom: .8rem; font-size: 1.35rem;
+        background: linear-gradient(135deg, var(--aqua), #2c8dad);
+        box-shadow: 0 12px 30px rgba(0,0,0,.22);
+    }
+    .brand-name { font-size: 1.05rem; font-weight: 760; letter-spacing: .01em; }
+    .brand-kicker { color: rgba(255,255,255,.55) !important; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; margin-top: .2rem; }
+
+    .dashboard-hero {
+        position: relative; overflow: hidden; padding: 2.2rem 2.35rem 2rem; margin: .25rem 0 1.35rem;
+        border-radius: 26px; color: white;
+        background: linear-gradient(120deg, #0a2942 0%, #0d526a 63%, #168395 100%);
+        box-shadow: 0 24px 60px rgba(8, 52, 76, .22);
+    }
+    .dashboard-hero::after {
+        content: ""; position: absolute; width: 300px; height: 300px; right: -80px; top: -125px;
+        border: 1px solid rgba(255,255,255,.16); border-radius: 50%; box-shadow: 0 0 0 45px rgba(255,255,255,.035), 0 0 0 95px rgba(255,255,255,.025);
+    }
+    .hero-eyebrow { color: #9ee6df; font-size: .72rem; font-weight: 750; letter-spacing: .16em; text-transform: uppercase; margin-bottom: .6rem; }
+    .hero-title { position: relative; z-index: 1; max-width: 980px; font-size: clamp(2rem, 3.3vw, 3.35rem); line-height: 1.04; font-weight: 780; letter-spacing: -.035em; margin: 0 0 .75rem; }
+    .hero-subtitle { position: relative; z-index: 1; max-width: 980px; color: rgba(255,255,255,.72); font-size: 1rem; line-height: 1.65; }
+    .hero-meta { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.25rem; }
+    .hero-chip { padding: .42rem .72rem; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; background: rgba(255,255,255,.08); color: rgba(255,255,255,.82); font-size: .78rem; }
+
+    h1, h2, h3 { color: var(--ink); letter-spacing: -.025em; }
+    h1 { font-weight: 780 !important; }
+    h2 { margin-top: 1.6rem !important; font-weight: 740 !important; }
+    h3 { font-weight: 700 !important; }
+    p, li { line-height: 1.68; }
+    [data-testid="stCaptionContainer"] { color: var(--muted); }
+
+    .stTabs [data-baseweb="tab-list"] {
+        gap: .3rem; padding: .35rem; margin: .2rem 0 1.15rem;
+        border: 1px solid var(--line); border-radius: 15px; background: rgba(255,255,255,.72);
+        box-shadow: 0 7px 24px rgba(15, 62, 88, .05); overflow-x: auto;
+    }
+    .stTabs [data-baseweb="tab"] {
+        height: 2.65rem; padding: 0 .95rem; border-radius: 11px; border: 0;
+        color: #567084; font-weight: 650; white-space: nowrap;
+    }
+    .stTabs [aria-selected="true"] { color: #0b526d !important; background: white !important; box-shadow: 0 5px 16px rgba(12, 68, 98, .10); }
+    .stTabs [data-baseweb="tab-highlight"] { display: none; }
+
     [data-testid="stMetric"] {
-        background: rgba(255,255,255,0.88);
-        border: 1px solid #d7e2ef;
-        border-radius: 14px;
-        padding: 0.8rem 1rem;
-        box-shadow: 0 6px 18px rgba(9, 35, 68, 0.06);
+        min-height: 116px; padding: 1.05rem 1.15rem;
+        background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+        box-shadow: 0 12px 32px rgba(14, 53, 78, .07); transition: transform .18s ease, box-shadow .18s ease;
     }
-    .section-card {
-        background: rgba(255,255,255,0.94);
-        border: 1px solid #d9e4ef;
-        border-radius: 18px;
-        padding: 1.4rem 1.5rem;
-        margin-bottom: 1.25rem;
-    }
-    .executive-summary {
-        font-size: 1.18rem;
-        line-height: 1.7;
-        color: #12344d;
-        padding: 0.4rem 0 0.8rem 0;
-    }
-    .thesis-context {
-        font-size: 1rem;
-        line-height: 1.75;
-        color: #23415c;
-        padding: 0.2rem 0 0.4rem 0;
-    }
-    .thesis-context p {
-        margin: 0.2rem 0;
+    [data-testid="stMetric"]:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    [data-testid="stMetricLabel"] { color: #698093; font-weight: 650; }
+    [data-testid="stMetricValue"] { color: #0b415d; font-weight: 770; letter-spacing: -.035em; }
+
+    [data-testid="stDataFrame"], [data-testid="stTable"] { border: 1px solid var(--line); border-radius: 18px; overflow: hidden; box-shadow: 0 12px 35px rgba(14,53,78,.06); }
+    [data-testid="stPlotlyChart"] { padding: .65rem; border: 1px solid var(--line); border-radius: 20px; background: rgba(255,255,255,.88); box-shadow: 0 14px 38px rgba(14,53,78,.065); }
+    [data-testid="stImage"] img { border-radius: 18px; box-shadow: 0 16px 38px rgba(14,53,78,.12); }
+
+    [data-testid="stAlert"] { border-radius: 16px; border: 1px solid rgba(20,108,148,.14); }
+    [data-testid="stExpander"] { background: rgba(255,255,255,.76); border: 1px solid var(--line); border-radius: 15px; overflow: hidden; }
+    .stSelectbox [data-baseweb="select"] > div, .stMultiSelect [data-baseweb="select"] > div { border-radius: 13px; border-color: var(--line); background: white; }
+    .stButton > button, .stDownloadButton > button { border-radius: 12px; border: 0; color: white; font-weight: 700; background: linear-gradient(135deg, #146c94, #168b91); box-shadow: 0 10px 22px rgba(20,108,148,.18); }
+
+    .section-card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 1.3rem; margin-bottom: 1rem; box-shadow: var(--shadow); }
+    .scientific-title { color: #0f5f78; font-weight: 750; letter-spacing: .02em; }
+    .status-card { background: rgba(20,108,148,.06); border-left: 4px solid var(--blue); border-radius: 14px; padding: .9rem 1rem; }
+    .status-pill { display: inline-block; padding: .35rem .65rem; border-radius: 999px; font-weight: 700; }
+    .excellent { background: rgba(31,153,133,.13); color: #147661; }
+    .moderate { background: rgba(217,170,82,.16); color: #916517; }
+    .poor { background: rgba(209,76,86,.13); color: #a4323c; }
+
+    @media (max-width: 800px) {
+        .block-container { padding: 1rem 1rem 3rem; }
+        .dashboard-hero { padding: 1.55rem 1.3rem; border-radius: 20px; }
+        .hero-title { font-size: 2rem; }
+        [data-testid="stMetric"] { min-height: 100px; }
     }
     </style>
     """,
@@ -532,10 +615,34 @@ flow_behavior_index_n, consistency_coefficient_k = fit_power_law(flow)
 
 sample_overview["Manufacturing_Date"] = sample_overview["Manufacturing_Date"].dt.strftime("%d.%m.%Y")
 
-st.title(T["title"])
-st.caption(T["subtitle"])
+st.markdown(
+    f"""
+    <section class="dashboard-hero">
+        <div class="hero-eyebrow">{tr('Applied beverage science · MSc research platform', 'Angewandte Getränkewissenschaft · MSc-Forschungsplattform')}</div>
+        <div class="hero-title">{T['title']}</div>
+        <div class="hero-subtitle">{T['subtitle']}</div>
+        <div class="hero-meta">
+            <span class="hero-chip">◈ Hochschule Ansbach</span>
+            <span class="hero-chip">Kinexus Prime Lab+</span>
+            <span class="hero-chip">EasyDens · SmartRef</span>
+            <span class="hero-chip">{tr('Measured evidence', 'Gemessene Evidenz')}</span>
+        </div>
+    </section>
+    """,
+    unsafe_allow_html=True,
+)
 
 with st.sidebar:
+    st.markdown(
+        f"""
+        <div class="brand-lockup">
+            <div class="brand-mark">◈</div>
+            <div class="brand-name">Caipiringwer Analytics</div>
+            <div class="brand-kicker">{tr('Stability intelligence', 'Stabilitätsanalyse')}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     st.subheader(T["dashboard_settings"])
     st.caption(f"{T['language']}: {LANG}")
     st.divider()
@@ -560,55 +667,19 @@ with st.sidebar:
         f"**{T['instrumentation']}:** Kinexus Prime Lab+ · EasyDens · SmartRef"
     )
 
-st.markdown(
-    """
-    <style>
-    .stApp { background: linear-gradient(180deg, #f6fbff 0%, #eef6fb 100%); }
-    .block-container { padding-top: 1rem; }
-    .section-card {
-        background: rgba(255, 255, 255, 0.94);
-        border: 1px solid rgba(28, 111, 182, 0.18);
-        border-radius: 20px;
-        padding: 1.15rem;
-        margin-bottom: 1rem;
-        box-shadow: 0 10px 32px rgba(15, 92, 153, 0.12);
-    }
-    .scientific-title {
-        color: #0f5f91;
-        font-weight: 700;
-        letter-spacing: 0.03em;
-        margin-bottom: 0.25rem;
-    }
-    .status-card {
-        background: rgba(13, 110, 184, 0.06);
-        border-left: 4px solid #0d6eb8;
-        border-radius: 16px;
-        padding: 0.9rem 1rem;
-        margin-top: 0.75rem;
-    }
-    .status-pill {
-        display: inline-block;
-        padding: 0.35rem 0.65rem;
-        border-radius: 999px;
-        font-weight: 700;
-        margin-top: 0.4rem;
-    }
-    .excellent { background: rgba(34, 197, 94, 0.18); color: #6ee7b7; }
-    .moderate { background: rgba(245, 158, 11, 0.18); color: #fcd34d; }
-    .poor { background: rgba(239, 68, 68, 0.18); color: #fca5a5; }
-    [data-testid="stMetric"] {
-        background: rgba(255, 255, 255, 0.98);
-        border: 1px solid rgba(0, 127, 199, 0.18);
-        border-radius: 16px;
-        padding: 1rem 1.1rem;
-        box-shadow: 0 8px 26px rgba(8, 71, 120, 0.10);
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
+chart_theme = go.layout.Template(
+    layout=go.Layout(
+        font=dict(family="Inter, Segoe UI, Arial", color="#24384a", size=13),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(248,251,252,0.72)",
+        colorway=["#146c94", "#2fa7b8", "#d9aa52", "#68a67d", "#b96070", "#7667a8"],
+        title=dict(font=dict(size=18, color="#132f45"), x=0.02, xanchor="left"),
+        hoverlabel=dict(bgcolor="white", bordercolor="#c8d8df", font=dict(color="#183247")),
+        legend=dict(bgcolor="rgba(255,255,255,.76)", bordercolor="rgba(17,67,98,.10)", borderwidth=1),
+        xaxis=dict(gridcolor="rgba(20,79,108,.09)", linecolor="rgba(20,79,108,.16)", zeroline=False),
+        yaxis=dict(gridcolor="rgba(20,79,108,.09)", linecolor="rgba(20,79,108,.16)", zeroline=False),
+    )
 )
-
-chart_theme = "plotly_white"
 
 top_tabs = st.tabs([
     T["top_executive"], T["top_rheology"], T["top_physchem"],
@@ -833,7 +904,7 @@ with microbiology_tabs[1]:
                 xgap=3, ygap=3,
             ))
             fig_evidence_matrix.update_layout(
-                template="plotly_white",
+                template=chart_theme,
                 title=tr("Qualitative microbiological evidence matrix", "Qualitative mikrobiologische Evidenzmatrix"),
                 xaxis_title=tr("Culture medium", "Nährmedium"),
                 yaxis_title=tr("Beverage system and treatment", "Getränkesystem und Behandlung"),
@@ -1039,7 +1110,7 @@ with rheology_tabs[1]:
     fig_flow.add_trace(go.Scatter(x=flow_curve["ɣ̇ (s⁻¹)"], y=flow_curve["η (Pa s)"], mode="lines+markers", name=f"{selected_flow_sample} mean",
         line=dict(color="#1f4e79", width=4), marker=dict(size=7, color="#1f4e79"),
         hovertemplate="Parent mean<br>Shear rate: %{x:.3g} s⁻¹<br>Apparent viscosity: %{y:.3g} Pa·s<extra></extra>"))
-    fig_flow.update_layout(title=tr("Measured apparent viscosity versus shear rate", "Gemessene scheinbare Viskosität in Abhängigkeit von der Scherrate"), template="plotly_white", xaxis_type="log", yaxis_type="log", xaxis_title=tr("Shear rate (s⁻¹)", "Scherrate (s⁻¹)"), yaxis_title=tr("Apparent viscosity (Pa·s)", "Scheinbare Viskosität (Pa·s)"))
+    fig_flow.update_layout(title=tr("Measured apparent viscosity versus shear rate", "Gemessene scheinbare Viskosität in Abhängigkeit von der Scherrate"), template=chart_theme, xaxis_type="log", yaxis_type="log", xaxis_title=tr("Shear rate (s⁻¹)", "Scherrate (s⁻¹)"), yaxis_title=tr("Apparent viscosity (Pa·s)", "Scheinbare Viskosität (Pa·s)"))
     fig_flow.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0))
     st.plotly_chart(fig_flow, width="stretch")
 
@@ -1068,7 +1139,7 @@ with rheology_tabs[1]:
         line=dict(color="#1f4e79", width=4), marker=dict(color="#1f4e79", size=7),
         hovertemplate="Parent mean<br>Shear rate: %{x:.3g} s⁻¹<br>Stress: %{y:.3g} ± %{error_y.array:.3g} Pa<extra></extra>",
     ))
-    fig_stress.update_layout(title=tr("Measured shear stress versus shear rate", "Gemessene Schubspannung in Abhängigkeit von der Scherrate"), template="plotly_white", xaxis_type="log", yaxis_type="log", xaxis_title=tr("Shear rate (s⁻¹)", "Scherrate (s⁻¹)"), yaxis_title=tr("Shear stress (Pa)", "Schubspannung (Pa)"), legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0))
+    fig_stress.update_layout(title=tr("Measured shear stress versus shear rate", "Gemessene Schubspannung in Abhängigkeit von der Scherrate"), template=chart_theme, xaxis_type="log", yaxis_type="log", xaxis_title=tr("Shear rate (s⁻¹)", "Scherrate (s⁻¹)"), yaxis_title=tr("Shear stress (Pa)", "Schubspannung (Pa)"), legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0))
     st.plotly_chart(fig_stress, width="stretch")
 
     model_table = pd.DataFrame([{
@@ -1082,7 +1153,7 @@ with rheology_tabs[1]:
         with st.expander("Power-law diagnostic residuals", expanded=False):
             fig_residual = go.Figure(go.Scatter(x=flow_fit_points["Fitted stress (Pa)"], y=flow_fit_points["Stress residual (Pa)"], mode="markers", marker=dict(color="#1f4e79", size=7), name="Measured residual"))
             fig_residual.add_hline(y=0, line_dash="dash", line_color="#555555")
-            fig_residual.update_layout(title="Residuals for the descriptive, non-accepted power-law fit", template="plotly_white", xaxis_title="Fitted shear stress (Pa)", yaxis_title="Measured − fitted stress (Pa)")
+            fig_residual.update_layout(title="Residuals for the descriptive, non-accepted power-law fit", template=chart_theme, xaxis_title="Fitted shear stress (Pa)", yaxis_title="Measured − fitted stress (Pa)")
             st.plotly_chart(fig_residual, width="stretch")
 
     st.markdown(tr("### Industrial interpretation — selected sample", "### Industrielle Interpretation – ausgewählte Probe"))
@@ -1113,7 +1184,7 @@ with rheology_tabs[2]:
         y="Pa",
         color="Modulus",
         title=tr(f"Measured viscoelastic moduli vs. strain — {selected_amp_sample}", f"Gemessene viskoelastische Moduli in Abhängigkeit von der Dehnung – {selected_amp_sample}"),
-        template="plotly_white",
+        template=chart_theme,
         log_x=True,
         log_y=True,
     )
@@ -1149,7 +1220,7 @@ with rheology_tabs[3]:
         y="Pa",
         color="Modulus",
         title=tr(f"Measured viscoelastic moduli across frequency — {selected_freq_sample}", f"Gemessene viskoelastische Moduli über die Frequenz – {selected_freq_sample}"),
-        template="plotly_white",
+        template=chart_theme,
         log_x=True,
         log_y=True,
     )
@@ -1277,7 +1348,7 @@ for _, row in sed_plot.iterrows():
     ))
     fig_trajectory.add_annotation(x=1.03, y=row["Final sediment-bed fraction (%)"], text=f"{row['Sample']}  {row['Final sediment-bed fraction (%)']:.1f}%", showarrow=False, xanchor="left", font=dict(size=11, color="#243447"))
 fig_trajectory.update_layout(
-    title=tr("A. Sedimentation trajectory map", "A. Verlaufskarte der Sedimentation"), template="plotly_white", height=360, showlegend=False,
+    title=tr("A. Sedimentation trajectory map", "A. Verlaufskarte der Sedimentation"), template=chart_theme, height=360, showlegend=False,
     margin=dict(l=55, r=85, t=50, b=45), font=dict(family="Arial, sans-serif", size=13, color="#243447"),
     xaxis=dict(tickmode="array", tickvals=[0, 1], ticktext=[tr("Mid observation", "Zwischenbeobachtung"), tr("Final observation", "Endbeobachtung")], showgrid=False, zeroline=False),
     yaxis=dict(title=tr("Sediment-bed fraction (% of total sample volume)", "Sedimentbettanteil (% des Gesamtprobenvolumens)"), gridcolor="#edf0f2", zeroline=False),
@@ -1296,7 +1367,7 @@ fig_fingerprint = go.Figure(go.Heatmap(
     colorscale=[[0, "#f3f6f8"], [0.5, "#aebfcd"], [1, accent]], showscale=False, xgap=2, ygap=2,
     hovertemplate="%{y}<br>%{x}: %{z:.1f}%<extra></extra>",
 ))
-fig_fingerprint.update_layout(title=tr("B. Sedimentation fingerprint heatmap", "B. Heatmap des Sedimentationsprofils"), template="plotly_white", height=330, margin=dict(l=55, r=25, t=50, b=35), font=dict(family="Arial, sans-serif", size=13, color="#243447"), xaxis=dict(side="top", showgrid=False), yaxis=dict(showgrid=False, autorange="reversed"))
+fig_fingerprint.update_layout(title=tr("B. Sedimentation fingerprint heatmap", "B. Heatmap des Sedimentationsprofils"), template=chart_theme, height=330, margin=dict(l=55, r=25, t=50, b=35), xaxis=dict(side="top", showgrid=False), yaxis=dict(showgrid=False, autorange="reversed"))
 sed_tabs[2].plotly_chart(fig_fingerprint, width="stretch", config={"displayModeBar": False})
 
 # Figure 3 — observation-state diagram, with the identity line as a physical reference rather than a stability class.
@@ -1310,7 +1381,7 @@ fig_state.add_trace(go.Scatter(
 ))
 fig_state.add_annotation(x=axis_limit * 0.72, y=axis_limit * 0.84, text=tr("Identity line: no measured bed-volume change", "Identitätslinie: keine gemessene Änderung des Bettvolumens"), showarrow=False, font=dict(size=11, color="#52616d"))
 fig_state.add_annotation(x=axis_limit * 0.70, y=axis_limit * 0.34, text=tr("Below line: reduced sediment-bed fraction", "Unterhalb der Linie: verringerter Sedimentbettanteil"), showarrow=False, font=dict(size=11, color="#52616d"))
-fig_state.update_layout(title=tr("C. Sedimentation state diagram", "C. Zustandsdiagramm der Sedimentation"), template="plotly_white", height=360, margin=dict(l=60, r=25, t=50, b=50), font=dict(family="Arial, sans-serif", size=13, color="#243447"), xaxis=dict(title=tr("Mid sediment-bed fraction (%)", "Sedimentbettanteil Zwischenbeobachtung (%)"), range=[0, axis_limit], gridcolor="#edf0f2", zeroline=False), yaxis=dict(title=tr("Final sediment-bed fraction (%)", "Finaler Sedimentbettanteil (%)"), range=[0, axis_limit], gridcolor="#edf0f2", zeroline=False, scaleanchor="x", scaleratio=1))
+fig_state.update_layout(title=tr("C. Sedimentation state diagram", "C. Zustandsdiagramm der Sedimentation"), template=chart_theme, height=360, margin=dict(l=60, r=25, t=50, b=50), xaxis=dict(title=tr("Mid sediment-bed fraction (%)", "Sedimentbettanteil Zwischenbeobachtung (%)"), range=[0, axis_limit], zeroline=False), yaxis=dict(title=tr("Final sediment-bed fraction (%)", "Finaler Sedimentbettanteil (%)"), range=[0, axis_limit], zeroline=False, scaleanchor="x", scaleratio=1))
 sed_tabs[2].plotly_chart(fig_state, width="stretch", config={"displayModeBar": False})
 
 sed_tabs[2].caption("Samples A–F were evaluated at 50 mL total volume, whereas Sample G was evaluated at 10 mL. All marks are direct graduated-cylinder measurements; no interpolation, kinetic model, stability class, or cross-module comparison is applied.")
@@ -1422,7 +1493,7 @@ with rheology_tabs[4]:
                     fill="toself", opacity=0.18, line=dict(color=palette[index % len(palette)], width=2),
                     name=radar_source.iloc[index]["Sample_ID"],
                 ))
-        radar_fig.update_layout(template="plotly_white", title=tr("Relative rheological fingerprint", "Relatives rheologisches Profil"), height=600,
+        radar_fig.update_layout(template=chart_theme, title=tr("Relative rheological fingerprint", "Relatives rheologisches Profil"), height=600,
                                 polar=dict(radialaxis=dict(visible=True, range=[0, 1], tickvals=[0, 0.5, 1])),
                                 legend=dict(orientation="h", yanchor="bottom", y=1.08))
         st.plotly_chart(radar_fig, width="stretch")
