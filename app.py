@@ -148,6 +148,11 @@ LANG = st.sidebar.selectbox("Language / Sprache", ["EN", "DE"], index=0)
 T = TRANSLATIONS[LANG]
 
 
+def tr(english: str, german: str) -> str:
+    """Return user-facing copy in the currently selected language."""
+    return german if LANG == "DE" else english
+
+
 def resolve_dataset_path(filename: str) -> Path:
     candidates = [
         Path.cwd() / filename,
@@ -705,7 +710,7 @@ def qualitative_risk_classification(row):
 
 with microbiology_tabs[0]:
     st.header(M["overview"])
-    st.caption("Industrial QA/R&D view based on the recorded study design and the qualitative LIMS audit. No microbial count is inferred from photographs or qualitative status fields.")
+    st.caption(tr("Industrial QA/R&D view based on the recorded study design and the qualitative LIMS audit. No microbial count is inferred from photographs or qualitative status fields.", "Industrielle QS-/F&E-Ansicht auf Grundlage des dokumentierten Versuchsdesigns und des qualitativen LIMS-Audits. Aus Fotografien oder qualitativen Statusfeldern wird keine Keimzahl abgeleitet."))
     if lims_microbiology.empty:
         st.warning("LIMS_Microbial_Audit.csv was not found in the workspace. Executive microbiological indicators cannot be populated.")
     else:
@@ -717,12 +722,12 @@ with microbiology_tabs[0]:
 
         executive_kpis = st.columns(4)
         executive_kpis[0].metric(M["systems"], unique_systems)
-        executive_kpis[1].metric(M["plates"], "156", help="Recorded experimental-design total across the two independent laboratory days.")
+        executive_kpis[1].metric(M["plates"], "156", help=tr("Recorded experimental-design total across the two independent laboratory days.", "Dokumentierte Gesamtzahl des Versuchsdesigns über zwei unabhängige Labortage."))
         executive_kpis[2].metric(M["critical"], critical_conditions)
         executive_kpis[3].metric(
             M["index"],
             f"{risk_scores.mean():.1f}/100" if not risk_scores.empty else M["not_recorded"],
-            help="Mean of the LIMS Risk_Score field, where available; no external acceptance threshold is applied.",
+            help=tr("Mean of the LIMS Risk_Score field, where available; no external acceptance threshold is applied.", "Mittelwert des LIMS-Feldes Risk_Score, sofern verfügbar; es wird kein externer Akzeptanzgrenzwert angewendet."),
         )
 
         if micro_processing_column is not None and micro_sample_column is not None:
@@ -740,14 +745,14 @@ with microbiology_tabs[0]:
         design_metrics[0].metric(M["pasteurized"], pasteurized)
         design_metrics[1].metric(M["non_pasteurized"], non_pasteurized)
         design_metrics[2].metric(M["media"], executive_micro[micro_medium_column].nunique() if micro_medium_column is not None else M["not_recorded"])
-        design_metrics[3].metric(M["replicates"], M["not_recorded"], help="The audit does not include a replicate identifier, so a replicate count is not inferred from qualitative records.")
-        st.info("Study design: six beverage systems, two media (E. coli selective agar and MEA), two independent laboratory days, and 156 processed culture plates. Twelve qualitative LIMS observations summarize outcomes from the 156 processed culture plates, including analytical replicates and two laboratory days.")
+        design_metrics[3].metric(M["replicates"], M["not_recorded"], help=tr("The audit does not include a replicate identifier, so a replicate count is not inferred from qualitative records.", "Das Audit enthält keine Replikatkennung; daher wird aus den qualitativen Datensätzen keine Replikatanzahl abgeleitet."))
+        st.info(tr("Study design: six beverage systems, two media (E. coli selective agar and MEA), two independent laboratory days, and 156 processed culture plates. Twelve qualitative LIMS observations summarize outcomes from the 156 processed culture plates, including analytical replicates and two laboratory days.", "Versuchsdesign: sechs Getränkesysteme, zwei Nährmedien (E.-coli-Selektivagar und MEA), zwei unabhängige Labortage und 156 verarbeitete Kulturplatten. Zwölf qualitative LIMS-Beobachtungen fassen die Ergebnisse der 156 Platten einschließlich analytischer Wiederholungen und beider Labortage zusammen."))
         st.caption(T["bottle_statement"])
         st.caption(T["bottle_limitation"])
 
 with microbiology_tabs[1]:
     st.header(M["results"])
-    st.caption("LIMS-derived qualitative observations only. No CFU/mL, log transformation, image enumeration, or predictive microbiological model is generated.")
+    st.caption(tr("LIMS-derived qualitative observations only. No CFU/mL, log transformation, image enumeration, or predictive microbiological model is generated.", "Ausschließlich aus LIMS abgeleitete qualitative Beobachtungen. Es werden weder KBE/mL noch Log-Transformationen, Bildauszählungen oder prädiktive mikrobiologische Modelle erzeugt."))
     if lims_microbiology.empty:
         st.warning("LIMS_Microbial_Audit.csv was not found in the workspace. No microbiological observations are displayed or interpreted.")
     else:
@@ -755,15 +760,15 @@ with microbiology_tabs[1]:
         micro_table["Risk Classification"] = micro_table.apply(qualitative_risk_classification, axis=1)
         ordered_risk = ["SAFE", "LOW RISK", "MODERATE RISK", "CRITICAL", "Unclassified"]
         observation_kpis = st.columns(5)
-        observation_kpis[0].metric("Qualitative microbiological observations", len(lims_microbiology))
+        observation_kpis[0].metric(tr("Qualitative microbiological observations", "Qualitative mikrobiologische Beobachtungen"), len(lims_microbiology))
         observation_kpis[1].metric(
-            "Total microbiological plates processed",
+            tr("Total microbiological plates processed", "Verarbeitete mikrobiologische Platten insgesamt"),
             "156",
             help="The total plate count includes analytical replicates, duplicate incubation days, and both microbiological media.",
         )
-        observation_kpis[2].metric("Critical observations", int((micro_table["Risk Classification"] == "CRITICAL").sum()))
-        observation_kpis[3].metric("Safe observations", int((micro_table["Risk Classification"] == "SAFE").sum()))
-        observation_kpis[4].metric("Reported treatments", micro_table[micro_processing_column].nunique() if micro_processing_column is not None else "Not recorded")
+        observation_kpis[2].metric(tr("Critical observations", "Kritische Beobachtungen"), int((micro_table["Risk Classification"] == "CRITICAL").sum()))
+        observation_kpis[3].metric(tr("Safe observations", "Unbedenkliche Beobachtungen"), int((micro_table["Risk Classification"] == "SAFE").sum()))
+        observation_kpis[4].metric(tr("Reported treatments", "Dokumentierte Behandlungen"), micro_table[micro_processing_column].nunique() if micro_processing_column is not None else M["not_recorded"])
         st.caption(
             "Methodology: 6 beverage systems × 2 media (E.coli selective agar and MEA) × analytical replicates × 2 laboratory days = 156 total incubated plates."
         )
@@ -801,7 +806,7 @@ with microbiology_tabs[1]:
                 header=dict(values=[f"<b>{column}</b>" for column in result_register.columns], fill_color="#173f5f", font=dict(color="white"), align="left"),
                 cells=dict(values=[result_register[column].fillna("—").astype(str).tolist() for column in result_register.columns], fill_color=[['white'] * len(result_register)] * (len(result_register.columns) - 1) + [risk_colors], align="left", height=30),
             )])
-            fig_result_register.update_layout(title="Qualitative microbiological results register", margin=dict(l=0, r=0, t=48, b=0))
+            fig_result_register.update_layout(title=tr("Qualitative microbiological results register", "Register qualitativer mikrobiologischer Ergebnisse"), margin=dict(l=0, r=0, t=48, b=0))
             st.plotly_chart(fig_result_register, width="stretch")
 
             evidence_grid = micro_table.copy()
@@ -829,9 +834,9 @@ with microbiology_tabs[1]:
             ))
             fig_evidence_matrix.update_layout(
                 template="plotly_white",
-                title="Qualitative microbiological evidence matrix",
-                xaxis_title="Culture medium",
-                yaxis_title="Beverage system and treatment",
+                title=tr("Qualitative microbiological evidence matrix", "Qualitative mikrobiologische Evidenzmatrix"),
+                xaxis_title=tr("Culture medium", "Nährmedium"),
+                yaxis_title=tr("Beverage system and treatment", "Getränkesystem und Behandlung"),
                 margin=dict(l=0, r=0, t=48, b=0),
             )
             st.plotly_chart(fig_evidence_matrix, width="stretch")
@@ -852,13 +857,13 @@ with microbiology_tabs[1]:
                 category_orders={"Risk Classification": ordered_risk},
                 color_discrete_map={"SAFE": "#2a9d8f", "LOW RISK": "#e9c46a", "MODERATE RISK": "#f4a261", "CRITICAL": "#e63946", "Unclassified": "#6c757d"},
                 template=chart_theme,
-                title="Manufacturing-date timeline of measured qualitative risk observations",
+                title=tr("Manufacturing-date timeline of measured qualitative risk observations", "Zeitverlauf gemessener qualitativer Risikobeobachtungen nach Herstellungsdatum"),
             )
             st.plotly_chart(fig_plate_timeline, width="stretch")
 
 with microbiology_tabs[2]:
-    st.header("Qualitative plate-image evidence")
-    st.caption("Photographs are representative qualitative evidence only. No image-based colony count, CFU estimate, or organism identification is performed.")
+    st.header(tr("Qualitative plate-image evidence", "Qualitative Bildnachweise der Platten"))
+    st.caption(tr("Photographs are representative qualitative evidence only. No image-based colony count, CFU estimate, or organism identification is performed.", "Die Fotografien dienen nur als repräsentative qualitative Nachweise. Es erfolgen keine bildbasierte Koloniezählung, KBE-Schätzung oder Organismenidentifikation."))
     pasteurized_images = [
         ("November 2024 Regular P", "data/microbiology/November 2024 regular P.png", "November 2024", "Regular", "Pasteurized", "Qualitative comparison image; risk classification remains based on the matched LIMS observation."),
         ("December 2025 Regular P", "data/microbiology/December 2025 regular P.png", "December 2025", "Regular", "Pasteurized", "Qualitative comparison image; risk classification remains based on the matched LIMS observation."),
@@ -898,7 +903,7 @@ with microbiology_tabs[2]:
                     st.caption("Representative qualitative microbiological evidence only. No colony count, CFU value, or microbiological status is inferred from this photograph.")
 
 with microbiology_tabs[3]:
-    st.header("Scientific interpretation")
+    st.header(tr("Scientific interpretation", "Wissenschaftliche Interpretation"))
     if lims_microbiology.empty or micro_status_column is None:
         st.info("Scientific interpretation is withheld because measured qualitative status fields from LIMS_Microbial_Audit.csv are not currently available.")
     else:
@@ -933,8 +938,8 @@ with microbiology_tabs[3]:
         st.warning(T["bottle_limitation"])
 
 with microbiology_tabs[4]:
-    st.header("Evidence-based shelf-life assessment")
-    st.caption("No expiry date, quantitative enumeration, regression model, or shelf-life duration is estimated from this dashboard.")
+    st.header(tr("Evidence-based shelf-life assessment", "Evidenzbasierte Haltbarkeitsbewertung"))
+    st.caption(tr("No expiry date, quantitative enumeration, regression model, or shelf-life duration is estimated from this dashboard.", "Dieses Dashboard schätzt weder ein Verfallsdatum noch quantitative Keimzahlen, ein Regressionsmodell oder eine Haltbarkeitsdauer."))
     if lims_microbiology.empty or micro_date_column is None:
         st.warning(M["shelf_statement"])
     else:
@@ -960,15 +965,15 @@ with microbiology_tabs[4]:
             category_orders={"Risk Classification": ["SAFE", "LOW RISK", "MODERATE RISK", "CRITICAL", "Unclassified"]},
             color_discrete_map={"SAFE": "#2a9d8f", "LOW RISK": "#e9c46a", "MODERATE RISK": "#f4a261", "CRITICAL": "#e63946", "Unclassified": "#6c757d"},
             template=chart_theme,
-            title="Sample-level worst observed qualitative microbiological risk by manufacturing date",
+            title=tr("Sample-level worst observed qualitative microbiological risk by manufacturing date", "Schwerstes beobachtetes qualitatives mikrobiologisches Risiko je Probe und Herstellungsdatum"),
         )
         st.plotly_chart(fig_micro_timeline, width="stretch")
         st.dataframe(microbiology_timeline_data.sort_values("Manufacturing_Date"), width="stretch", hide_index=True)
         st.warning(M["shelf_statement"])
 
 with microbiology_tabs[5]:
-    st.header("Literature support and analytical standards")
-    st.caption("Peer-reviewed context and official enumeration methods are provided for scientific framing; they do not replace the LIMS record or product-specific regulatory criteria.")
+    st.header(tr("Literature support and analytical standards", "Literaturgrundlage und analytische Standards"))
+    st.caption(tr("Peer-reviewed context and official enumeration methods are provided for scientific framing; they do not replace the LIMS record or product-specific regulatory criteria.", "Begutachtete Fachliteratur und offizielle Zählmethoden dienen der wissenschaftlichen Einordnung; sie ersetzen weder den LIMS-Datensatz noch produktspezifische regulatorische Kriterien."))
     st.markdown(
         "- *The incidence and impact of microbial spoilage in the production of fruit and vegetable juices as reported by juice manufacturers* (2018). Food Control, 85, 144–150. DOI: [10.1016/j.foodcont.2017.09.025](https://doi.org/10.1016/j.foodcont.2017.09.025)\n"
         "- Wareing, P. (2016). *Microbiology of soft drinks and fruit juices*. DOI: [10.1002/9781118634943.ch11](https://doi.org/10.1002/9781118634943.ch11)\n"
@@ -981,37 +986,37 @@ with microbiology_tabs[5]:
 top_tabs[0].header(T["executive_project"])
 top_tabs[0].markdown(T["subtitle"])
 top_tabs[0].markdown(f"### {T['study_architecture']}")
-top_tabs[0].write("Four independent analytical modules contribute complementary evidence. Integration is limited to high-level narrative interpretation.")
+top_tabs[0].write(tr("Four independent analytical modules contribute complementary evidence. Integration is limited to high-level narrative interpretation.", "Vier unabhängige Analysemodule liefern sich ergänzende Erkenntnisse. Die Integration beschränkt sich auf eine übergeordnete narrative Interpretation."))
 summary_kpis = top_tabs[0].columns(3)
-summary_kpis[0].metric("Analytical modules", 4)
-summary_kpis[1].metric("Rheology sample families", sample_overview["Sample_ID"].nunique())
-summary_kpis[2].metric("Physicochemical samples", physchem["Sample_ID"].nunique() if not physchem.empty else "Not loaded")
+summary_kpis[0].metric(tr("Analytical modules", "Analysemodule"), 4)
+summary_kpis[1].metric(tr("Rheology sample families", "Rheologische Probenfamilien"), sample_overview["Sample_ID"].nunique())
+summary_kpis[2].metric(tr("Physicochemical samples", "Physikochemische Proben"), physchem["Sample_ID"].nunique() if not physchem.empty else T["not_loaded"])
 summary_kpis = top_tabs[0].columns(3)
-summary_kpis[0].metric("Sedimentation samples", 7)
-summary_kpis[1].metric("Microbiology beverage systems", lims_microbiology["Sample"].nunique() if not lims_microbiology.empty else "Not loaded")
-summary_kpis[2].metric("Total microbiological plates processed", "156")
+summary_kpis[0].metric(tr("Sedimentation samples", "Sedimentationsproben"), 7)
+summary_kpis[1].metric(tr("Microbiology beverage systems", "Mikrobiologische Getränkesysteme"), lims_microbiology["Sample"].nunique() if not lims_microbiology.empty else T["not_loaded"])
+summary_kpis[2].metric(tr("Total microbiological plates processed", "Verarbeitete mikrobiologische Platten insgesamt"), "156")
 top_tabs[0].markdown(f"### {T['integrated_conclusion']}")
-top_tabs[0].write("The dashboard presents module-specific measured evidence without merging experimental identifiers or performing cross-module statistical comparisons.")
+top_tabs[0].write(tr("The dashboard presents module-specific measured evidence without merging experimental identifiers or performing cross-module statistical comparisons.", "Das Dashboard stellt modulspezifische Messdaten dar, ohne experimentelle Kennungen zusammenzuführen oder modulübergreifende statistische Vergleiche durchzuführen."))
 top_tabs[0].info(T["data_integrity"])
 top_tabs[0].caption(T["bottle_statement"])
 top_tabs[0].caption(T["bottle_limitation"])
 
 with rheology_tabs[0]:
-    st.header("Rheology Overview and Experimental Design")
-    st.markdown("### Why Rheology Was Performed")
-    st.write("Rheology was selected because structural, viscoelastic, and flow properties are relevant to physical stability and suspension behaviour.")
-    st.markdown("### Experimental Design")
-    st.write("Methods: Flow curve, amplitude sweep, frequency sweep. Instrument: Kinexus Prime Lab+. Research partners: Hochschule Ansbach and Marmeladenherz.")
+    st.header(tr("Rheology Overview and Experimental Design", "Rheologieübersicht und Versuchsdesign"))
+    st.markdown(tr("### Why Rheology Was Performed", "### Warum rheologische Untersuchungen durchgeführt wurden"))
+    st.write(tr("Rheology was selected because structural, viscoelastic, and flow properties are relevant to physical stability and suspension behaviour.", "Rheologische Untersuchungen wurden gewählt, weil Struktur-, viskoelastische und Fließeigenschaften für die physikalische Stabilität und das Suspensionsverhalten relevant sind."))
+    st.markdown(tr("### Experimental Design", "### Versuchsdesign"))
+    st.write(tr("Methods: Flow curve, amplitude sweep, frequency sweep. Instrument: Kinexus Prime Lab+. Research partners: Hochschule Ansbach and Marmeladenherz.", "Methoden: Fließkurve, Amplitudensweep und Frequenzsweep. Gerät: Kinexus Prime Lab+. Forschungspartner: Hochschule Ansbach und Marmeladenherz."))
     st.caption(T["bottle_statement"])
-    st.metric("Parent samples / replicate measurements", f"{sample_overview['Sample_ID'].nunique()} / {len(meta)}")
-    st.markdown("### Rheology results summary")
-    st.write(f"Mean G′: {mean_gprime:.3g} Pa; Mean G″: {mean_gdouble:.3g} Pa; Mean tanδ: {mean_tandelta:.3f}; flow index n: {flow_behavior_index_n:.3f}.")
+    st.metric(tr("Parent samples / replicate measurements", "Ausgangsproben / Wiederholungsmessungen"), f"{sample_overview['Sample_ID'].nunique()} / {len(meta)}")
+    st.markdown(tr("### Rheology results summary", "### Zusammenfassung der Rheologieergebnisse"))
+    st.write(tr(f"Mean G′: {mean_gprime:.3g} Pa; Mean G″: {mean_gdouble:.3g} Pa; Mean tanδ: {mean_tandelta:.3f}; flow index n: {flow_behavior_index_n:.3f}.", f"Mittleres G′: {mean_gprime:.3g} Pa; mittleres G″: {mean_gdouble:.3g} Pa; mittleres tanδ: {mean_tandelta:.3f}; Fließindex n: {flow_behavior_index_n:.3f}."))
 
 with rheology_tabs[1]:
-    st.header("Flow curve")
-    st.caption("Measured flow response for processing, filling, pouring, and oral-flow assessment.")
+    st.header(tr("Flow curve", "Fließkurve"))
+    st.caption(tr("Measured flow response for processing, filling, pouring, and oral-flow assessment.", "Gemessenes Fließverhalten zur Beurteilung von Verarbeitung, Abfüllung, Ausgießen und oralem Fluss."))
     flow_samples = sorted(flow["Sample_Family"].dropna().unique())
-    selected_flow_sample = st.selectbox("Sample family", flow_samples, key="flow_sample")
+    selected_flow_sample = st.selectbox(tr("Sample family", "Probenfamilie"), flow_samples, key="flow_sample")
     selected_flow = flow[flow["Sample_Family"] == selected_flow_sample]
     flow_curve = measured_curve(selected_flow, "ɣ̇ (s⁻¹)", ["η (Pa s)", "σ (Pa)"])
     flow_details, flow_fit_points = power_law_model_details(selected_flow)
@@ -1021,10 +1026,10 @@ with rheology_tabs[1]:
     viscosity_retention = eta_high / eta_low * 100 if pd.notna(eta_low) and eta_low != 0 else np.nan
 
     flow_kpi = st.columns(4)
-    flow_kpi[0].metric("Flow behavior index, n", f"{flow_n:.3f}", help="Log–log slope of measured shear stress versus shear rate. n < 1 indicates shear-thinning within this measurement range.")
-    flow_kpi[1].metric("Consistency coefficient, K", f"{flow_k:.3g} Pa·sⁿ", help="Power-law coefficient from the measured stress–shear-rate fit.")
-    flow_kpi[2].metric("Stress-fit R²", f"{flow_r2:.3f}", help="Goodness of fit for the power-law calculation; this is not a separate measurement.")
-    flow_kpi[3].metric("Viscosity retained", f"{viscosity_retention:.1f}%", help=f"Ratio of the values nearest to {shear_high:.3g} and {shear_low:.3g} s⁻¹; no interpolation is used.")
+    flow_kpi[0].metric(tr("Flow behavior index, n", "Fließverhaltensindex n"), f"{flow_n:.3f}", help=tr("Log–log slope of measured shear stress versus shear rate. n < 1 indicates shear-thinning within this measurement range.", "Log-Log-Steigung der gemessenen Schubspannung gegenüber der Scherrate. n < 1 weist in diesem Messbereich auf Scherverdünnung hin."))
+    flow_kpi[1].metric(tr("Consistency coefficient, K", "Konsistenzkoeffizient K"), f"{flow_k:.3g} Pa·sⁿ", help=tr("Power-law coefficient from the measured stress–shear-rate fit.", "Potenzgesetz-Koeffizient aus der Anpassung von Schubspannung und Scherrate."))
+    flow_kpi[2].metric(tr("Stress-fit R²", "R² der Spannungsanpassung"), f"{flow_r2:.3f}", help=tr("Goodness of fit for the power-law calculation; this is not a separate measurement.", "Anpassungsgüte der Potenzgesetzberechnung; dies ist keine separate Messung."))
+    flow_kpi[3].metric(tr("Viscosity retained", "Verbleibende Viskosität"), f"{viscosity_retention:.1f}%", help=tr(f"Ratio of the values nearest to {shear_high:.3g} and {shear_low:.3g} s⁻¹; no interpolation is used.", f"Verhältnis der Werte nahe {shear_high:.3g} und {shear_low:.3g} s⁻¹; es wird nicht interpoliert."))
 
     fig_flow = go.Figure()
     for replicate, replicate_data in selected_flow.groupby("Sample"):
@@ -1034,7 +1039,7 @@ with rheology_tabs[1]:
     fig_flow.add_trace(go.Scatter(x=flow_curve["ɣ̇ (s⁻¹)"], y=flow_curve["η (Pa s)"], mode="lines+markers", name=f"{selected_flow_sample} mean",
         line=dict(color="#1f4e79", width=4), marker=dict(size=7, color="#1f4e79"),
         hovertemplate="Parent mean<br>Shear rate: %{x:.3g} s⁻¹<br>Apparent viscosity: %{y:.3g} Pa·s<extra></extra>"))
-    fig_flow.update_layout(title="Measured apparent viscosity versus shear rate", template="plotly_white", xaxis_type="log", yaxis_type="log", xaxis_title="Shear rate (s⁻¹)", yaxis_title="Apparent viscosity (Pa·s)")
+    fig_flow.update_layout(title=tr("Measured apparent viscosity versus shear rate", "Gemessene scheinbare Viskosität in Abhängigkeit von der Scherrate"), template="plotly_white", xaxis_type="log", yaxis_type="log", xaxis_title=tr("Shear rate (s⁻¹)", "Scherrate (s⁻¹)"), yaxis_title=tr("Apparent viscosity (Pa·s)", "Scheinbare Viskosität (Pa·s)"))
     fig_flow.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0))
     st.plotly_chart(fig_flow, width="stretch")
 
@@ -1063,7 +1068,7 @@ with rheology_tabs[1]:
         line=dict(color="#1f4e79", width=4), marker=dict(color="#1f4e79", size=7),
         hovertemplate="Parent mean<br>Shear rate: %{x:.3g} s⁻¹<br>Stress: %{y:.3g} ± %{error_y.array:.3g} Pa<extra></extra>",
     ))
-    fig_stress.update_layout(title="Measured shear stress versus shear rate", template="plotly_white", xaxis_type="log", yaxis_type="log", xaxis_title="Shear rate (s⁻¹)", yaxis_title="Shear stress (Pa)", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0))
+    fig_stress.update_layout(title=tr("Measured shear stress versus shear rate", "Gemessene Schubspannung in Abhängigkeit von der Scherrate"), template="plotly_white", xaxis_type="log", yaxis_type="log", xaxis_title=tr("Shear rate (s⁻¹)", "Scherrate (s⁻¹)"), yaxis_title=tr("Shear stress (Pa)", "Schubspannung (Pa)"), legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0))
     st.plotly_chart(fig_stress, width="stretch")
 
     model_table = pd.DataFrame([{
@@ -1080,7 +1085,7 @@ with rheology_tabs[1]:
             fig_residual.update_layout(title="Residuals for the descriptive, non-accepted power-law fit", template="plotly_white", xaxis_title="Fitted shear stress (Pa)", yaxis_title="Measured − fitted stress (Pa)")
             st.plotly_chart(fig_residual, width="stretch")
 
-    st.markdown("### Industrial interpretation — selected sample")
+    st.markdown(tr("### Industrial interpretation — selected sample", "### Industrielle Interpretation – ausgewählte Probe"))
     if pd.notna(flow_n):
         behavior = "shear-thinning" if flow_n < 0.95 else "approximately Newtonian over the measured range" if flow_n <= 1.05 else "shear-thickening"
         st.write(f"**{selected_flow_sample}** is {behavior} by the measured power-law index (n = {flow_n:.3f}; R² = {flow_r2:.3f}).")
@@ -1088,10 +1093,10 @@ with rheology_tabs[1]:
     st.caption("K, n, R² and retention are calculations from the displayed measured points. They do not establish a yield stress or extrapolate beyond the workbook range.")
 
 with rheology_tabs[2]:
-    st.header("Amplitude sweep")
-    st.caption("Measured deformation tolerance and structure-retention assessment.")
+    st.header(tr("Amplitude sweep", "Amplitudensweep"))
+    st.caption(tr("Measured deformation tolerance and structure-retention assessment.", "Bewertung der gemessenen Verformungstoleranz und Strukturerhaltung."))
     amp_samples = sorted(amp["Sample_Family"].dropna().unique())
-    selected_amp_sample = st.selectbox("Sample family", amp_samples, key="amp_sample")
+    selected_amp_sample = st.selectbox(tr("Sample family", "Probenfamilie"), amp_samples, key="amp_sample")
     amp_curve, amp_metrics = amplitude_metrics(amp[amp["Sample_Family"] == selected_amp_sample])
     amp_curve["tan_delta"] = amp_curve['G" (Pa)'] / amp_curve["G' (Pa)"].replace(0, np.nan)
 
@@ -1107,7 +1112,7 @@ with rheology_tabs[2]:
         x="γ* (%)",
         y="Pa",
         color="Modulus",
-        title=f"Measured viscoelastic moduli vs. strain — {selected_amp_sample}",
+        title=tr(f"Measured viscoelastic moduli vs. strain — {selected_amp_sample}", f"Gemessene viskoelastische Moduli in Abhängigkeit von der Dehnung – {selected_amp_sample}"),
         template="plotly_white",
         log_x=True,
         log_y=True,
@@ -1115,7 +1120,7 @@ with rheology_tabs[2]:
     fig_amp.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0))
     st.plotly_chart(fig_amp, width="stretch")
 
-    st.markdown("### Industrial interpretation — selected sample")
+    st.markdown(tr("### Industrial interpretation — selected sample", "### Industrielle Interpretation – ausgewählte Probe"))
     if pd.notna(amp_metrics["lvr_limit"]):
         st.write(f"The measured linear-viscoelastic region extends to {amp_metrics['lvr_limit']:.3g}% strain using a ±5% G′ criterion. At the highest measured strain ({amp_metrics['max_strain']:.3g}%), G′ retains {amp_metrics['retention']:.1f}% of its initial reference.")
     if amp_curve["tan_delta"].median() < 1:
@@ -1125,10 +1130,10 @@ with rheology_tabs[2]:
     st.caption("The LVR limit is a stated data-reduction criterion, not an unmeasured failure point. No amplitude values are interpolated.")
 
 with rheology_tabs[3]:
-    st.header("Frequency sweep")
-    st.caption("Measured time-scale dependence and elastic-versus-viscous balance.")
+    st.header(tr("Frequency sweep", "Frequenzsweep"))
+    st.caption(tr("Measured time-scale dependence and elastic-versus-viscous balance.", "Gemessene Zeitskalenabhängigkeit und Verhältnis von elastischem zu viskosem Verhalten."))
     freq_samples = sorted(freq["Sample_Family"].dropna().unique())
-    selected_freq_sample = st.selectbox("Sample family", freq_samples, key="freq_sample")
+    selected_freq_sample = st.selectbox(tr("Sample family", "Probenfamilie"), freq_samples, key="freq_sample")
     freq_curve, freq_metrics = frequency_metrics(freq[freq["Sample_Family"] == selected_freq_sample])
 
     freq_kpi = st.columns(4)
@@ -1143,7 +1148,7 @@ with rheology_tabs[3]:
         x="f (Hz)",
         y="Pa",
         color="Modulus",
-        title=f"Measured viscoelastic moduli across frequency — {selected_freq_sample}",
+        title=tr(f"Measured viscoelastic moduli across frequency — {selected_freq_sample}", f"Gemessene viskoelastische Moduli über die Frequenz – {selected_freq_sample}"),
         template="plotly_white",
         log_x=True,
         log_y=True,
@@ -1151,24 +1156,24 @@ with rheology_tabs[3]:
     fig_freq.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0))
     st.plotly_chart(fig_freq, width="stretch")
 
-    st.markdown("### Industrial interpretation — selected sample")
-    elastic_dominance = "elastic-dominant" if freq_metrics["tan_delta"] < 1 else "viscous-dominant"
-    st.write(f"The median measured G″/G′ ratio is {freq_metrics['tan_delta']:.3f}; the response is therefore {elastic_dominance} over the measured frequency range.")
-    st.write(f"G′ changes from {freq_metrics['low_gprime']:.3g} Pa at the lowest measured frequency to {freq_metrics['high_gprime']:.3g} Pa at the highest. Its log–log frequency slope is {freq_metrics['gprime_slope']:.3f} (R² = {freq_metrics['gprime_r2']:.3f}).")
-    st.caption("This describes the observed oscillatory response only; it does not assign a gel class or infer behavior outside the measured frequency range.")
+    st.markdown(tr("### Industrial interpretation — selected sample", "### Industrielle Interpretation – ausgewählte Probe"))
+    elastic_dominance = tr("elastic-dominant", "elastisch dominiert") if freq_metrics["tan_delta"] < 1 else tr("viscous-dominant", "viskos dominiert")
+    st.write(tr(f"The median measured G″/G′ ratio is {freq_metrics['tan_delta']:.3f}; the response is therefore {elastic_dominance} over the measured frequency range.", f"Das gemessene mediane G″/G′-Verhältnis beträgt {freq_metrics['tan_delta']:.3f}; die Antwort ist über den gemessenen Frequenzbereich daher {elastic_dominance}."))
+    st.write(tr(f"G′ changes from {freq_metrics['low_gprime']:.3g} Pa at the lowest measured frequency to {freq_metrics['high_gprime']:.3g} Pa at the highest. Its log–log frequency slope is {freq_metrics['gprime_slope']:.3f} (R² = {freq_metrics['gprime_r2']:.3f}).", f"G′ ändert sich von {freq_metrics['low_gprime']:.3g} Pa bei der niedrigsten gemessenen Frequenz auf {freq_metrics['high_gprime']:.3g} Pa bei der höchsten. Die Log-Log-Frequenzsteigung beträgt {freq_metrics['gprime_slope']:.3f} (R² = {freq_metrics['gprime_r2']:.3f})."))
+    st.caption(tr("This describes the observed oscillatory response only; it does not assign a gel class or infer behavior outside the measured frequency range.", "Dies beschreibt ausschließlich die beobachtete oszillatorische Antwort; es wird weder eine Gelklasse zugeordnet noch Verhalten außerhalb des Messbereichs abgeleitet."))
 
 with physicochemical_tabs[0]:
     st.header(T["physical"])
-    st.caption("Measured-data chapter on physical stability, sedimentation evidence, clarification, and re-dispersibility.")
+    st.caption(tr("Measured-data chapter on physical stability, sedimentation evidence, clarification, and re-dispersibility.", "Messdatenkapitel zu physikalischer Stabilität, Sedimentationsnachweisen, Klärung und Redispergierbarkeit."))
 
-    st.markdown("### 1. Introduction")
+    st.markdown(tr("### 1. Introduction", "### 1. Einleitung"))
     st.markdown(
-        "This module is limited to measured physicochemical observations and any sedimentation photographs that are actually present in the workspace. It does not infer sedimentation severity from an invented score or unsupported model output."
+        tr("This module is limited to measured physicochemical observations and any sedimentation photographs that are actually present in the workspace. It does not infer sedimentation severity from an invented score or unsupported model output.", "Dieses Modul beschränkt sich auf gemessene physikochemische Beobachtungen und tatsächlich im Arbeitsbereich vorhandene Sedimentationsfotografien. Der Schweregrad der Sedimentation wird weder aus einem erfundenen Score noch aus nicht gestützten Modellergebnissen abgeleitet.")
     )
 
-    st.markdown("### 2. Experimental Design")
+    st.markdown(tr("### 2. Experimental Design", "### 2. Versuchsdesign"))
     if physchem.empty:
-        st.warning("The measured physicochemical workbook was not found at data/physicochemical/physicochemical_results.ods.")
+        st.warning(tr("The measured physicochemical workbook was not found at data/physicochemical/physicochemical_results.ods.", "Die gemessene physikochemische Arbeitsmappe wurde unter data/physicochemical/physicochemical_results.ods nicht gefunden."))
     else:
         measured_columns = ["Sample_ID", "Storage_Date", "Storage_Duration", "Product_Type", "Brix_Avg", "Sugar_g_L", "Potential_Alcohol_vv", "Density_g_cm3", "Specific_Gravity", "pH"]
         display_df = physchem[measured_columns].copy()
@@ -1177,13 +1182,13 @@ with physicochemical_tabs[0]:
 
         experimental_summary = st.columns(4)
         with experimental_summary[0]:
-            st.metric("Measured samples", int(display_df["Sample_ID"].nunique()))
+            st.metric(tr("Measured samples", "Gemessene Proben"), int(display_df["Sample_ID"].nunique()))
         with experimental_summary[1]:
-            st.metric("Storage ages represented", display_df["Storage_Duration"].nunique())
+            st.metric(tr("Storage ages represented", "Erfasste Lagerungsdauern"), display_df["Storage_Duration"].nunique())
         with experimental_summary[2]:
-            st.metric("Mean Brix", f"{safe_mean(display_df['Brix_Avg']):.2f} °Bx")
+            st.metric(tr("Mean Brix", "Mittlerer Brix-Wert"), f"{safe_mean(display_df['Brix_Avg']):.2f} °Bx")
         with experimental_summary[3]:
-            st.metric("Mean pH", f"{safe_mean(display_df['pH']):.2f}")
+            st.metric(tr("Mean pH", "Mittlerer pH-Wert"), f"{safe_mean(display_df['pH']):.2f}")
 
     # ==========================================================
 # REAL SEDIMENTATION ANALYSIS
@@ -1247,13 +1252,13 @@ with sed_tabs[0]:
     st.dataframe(sed_df, width="stretch", hide_index=True)
 
     col1,col2,col3,col4 = st.columns(4)
-    col1.metric("Samples evaluated", len(sed_df))
-    col2.metric("Observation points", 2)
-    col3.metric("Largest measured sediment-bed contraction", f"{sed_df['Sediment-bed contraction (%)'].max():.1f}%")
-    col4.metric("Highest final sediment volume", f"{sed_df['Final Sediment (mL)'].max():.1f} mL")
-    st.caption("Sediment-bed fractions are calculated using the recorded total sample volumes: 50 mL for Samples A–F and 10 mL for Sample G.")
+    col1.metric(tr("Samples evaluated", "Bewertete Proben"), len(sed_df))
+    col2.metric(tr("Observation points", "Beobachtungszeitpunkte"), 2)
+    col3.metric(tr("Largest measured sediment-bed contraction", "Größte gemessene Sedimentbettkontraktion"), f"{sed_df['Sediment-bed contraction (%)'].max():.1f}%")
+    col4.metric(tr("Highest final sediment volume", "Höchstes finales Sedimentvolumen"), f"{sed_df['Final Sediment (mL)'].max():.1f} mL")
+    st.caption(tr("Sediment-bed fractions are calculated using the recorded total sample volumes: 50 mL for Samples A–F and 10 mL for Sample G.", "Die Sedimentbettanteile werden anhand der dokumentierten Gesamtprobenvolumina berechnet: 50 mL für die Proben A–F und 10 mL für Probe G."))
 
-sed_tabs[2].markdown("### Sedimentation results plate")
+sed_tabs[2].markdown(tr("### Sedimentation results plate", "### Übersicht der Sedimentationsergebnisse"))
 sed_plot = sed_df.sort_values("Final sediment-bed fraction (%)").reset_index(drop=True)
 sample_order = sed_plot["Sample"].tolist()
 sample_y = {sample: index for index, sample in enumerate(sample_order)}
@@ -1272,10 +1277,10 @@ for _, row in sed_plot.iterrows():
     ))
     fig_trajectory.add_annotation(x=1.03, y=row["Final sediment-bed fraction (%)"], text=f"{row['Sample']}  {row['Final sediment-bed fraction (%)']:.1f}%", showarrow=False, xanchor="left", font=dict(size=11, color="#243447"))
 fig_trajectory.update_layout(
-    title="A. Sedimentation trajectory map", template="plotly_white", height=360, showlegend=False,
+    title=tr("A. Sedimentation trajectory map", "A. Verlaufskarte der Sedimentation"), template="plotly_white", height=360, showlegend=False,
     margin=dict(l=55, r=85, t=50, b=45), font=dict(family="Arial, sans-serif", size=13, color="#243447"),
-    xaxis=dict(tickmode="array", tickvals=[0, 1], ticktext=["Mid observation", "Final observation"], showgrid=False, zeroline=False),
-    yaxis=dict(title="Sediment-bed fraction (% of total sample volume)", gridcolor="#edf0f2", zeroline=False),
+    xaxis=dict(tickmode="array", tickvals=[0, 1], ticktext=[tr("Mid observation", "Zwischenbeobachtung"), tr("Final observation", "Endbeobachtung")], showgrid=False, zeroline=False),
+    yaxis=dict(title=tr("Sediment-bed fraction (% of total sample volume)", "Sedimentbettanteil (% des Gesamtprobenvolumens)"), gridcolor="#edf0f2", zeroline=False),
 )
 fig_trajectory.add_annotation(x=0, y=1.08, xref="x", yref="paper", text="○ Mid", showarrow=False, font=dict(color=neutral, size=11))
 fig_trajectory.add_annotation(x=1, y=1.08, xref="x", yref="paper", text="● Final", showarrow=False, font=dict(color=accent, size=11))
@@ -1283,7 +1288,7 @@ sed_tabs[2].plotly_chart(fig_trajectory, width="stretch", config={"displayModeBa
 
 # Figure 2 — numerical fingerprint uses direct values only and makes the result hierarchy immediately visible.
 fingerprint_columns = ["Mid sediment-bed fraction (%)", "Final sediment-bed fraction (%)", "Sediment-bed contraction (%)", "Final-to-mid sediment-bed ratio (%)"]
-fingerprint_labels = ["Mid fraction", "Final fraction", "Contraction", "Final / mid ratio"]
+fingerprint_labels = [tr("Mid fraction", "Zwischenanteil"), tr("Final fraction", "Finaler Anteil"), tr("Contraction", "Kontraktion"), tr("Final / mid ratio", "Final-/Zwischenverhältnis")]
 fingerprint_values = sed_plot[fingerprint_columns].to_numpy()
 fig_fingerprint = go.Figure(go.Heatmap(
     z=fingerprint_values, x=fingerprint_labels, y=[f"Sample {sample}" for sample in sample_order],
@@ -1291,7 +1296,7 @@ fig_fingerprint = go.Figure(go.Heatmap(
     colorscale=[[0, "#f3f6f8"], [0.5, "#aebfcd"], [1, accent]], showscale=False, xgap=2, ygap=2,
     hovertemplate="%{y}<br>%{x}: %{z:.1f}%<extra></extra>",
 ))
-fig_fingerprint.update_layout(title="B. Sedimentation fingerprint heatmap", template="plotly_white", height=330, margin=dict(l=55, r=25, t=50, b=35), font=dict(family="Arial, sans-serif", size=13, color="#243447"), xaxis=dict(side="top", showgrid=False), yaxis=dict(showgrid=False, autorange="reversed"))
+fig_fingerprint.update_layout(title=tr("B. Sedimentation fingerprint heatmap", "B. Heatmap des Sedimentationsprofils"), template="plotly_white", height=330, margin=dict(l=55, r=25, t=50, b=35), font=dict(family="Arial, sans-serif", size=13, color="#243447"), xaxis=dict(side="top", showgrid=False), yaxis=dict(showgrid=False, autorange="reversed"))
 sed_tabs[2].plotly_chart(fig_fingerprint, width="stretch", config={"displayModeBar": False})
 
 # Figure 3 — observation-state diagram, with the identity line as a physical reference rather than a stability class.
@@ -1303,9 +1308,9 @@ fig_state.add_trace(go.Scatter(
     marker=dict(size=11, color=accent, line=dict(color="white", width=1)), text=[f"{sample}" for sample in sample_order], textposition="top center", showlegend=False,
     hovertemplate="Sample %{text}<br>Mid: %{x:.1f}%<br>Final: %{y:.1f}%<extra></extra>",
 ))
-fig_state.add_annotation(x=axis_limit * 0.72, y=axis_limit * 0.84, text="Identity line: no measured bed-volume change", showarrow=False, font=dict(size=11, color="#52616d"))
-fig_state.add_annotation(x=axis_limit * 0.70, y=axis_limit * 0.34, text="Below line: reduced sediment-bed fraction", showarrow=False, font=dict(size=11, color="#52616d"))
-fig_state.update_layout(title="C. Sedimentation state diagram", template="plotly_white", height=360, margin=dict(l=60, r=25, t=50, b=50), font=dict(family="Arial, sans-serif", size=13, color="#243447"), xaxis=dict(title="Mid sediment-bed fraction (%)", range=[0, axis_limit], gridcolor="#edf0f2", zeroline=False), yaxis=dict(title="Final sediment-bed fraction (%)", range=[0, axis_limit], gridcolor="#edf0f2", zeroline=False, scaleanchor="x", scaleratio=1))
+fig_state.add_annotation(x=axis_limit * 0.72, y=axis_limit * 0.84, text=tr("Identity line: no measured bed-volume change", "Identitätslinie: keine gemessene Änderung des Bettvolumens"), showarrow=False, font=dict(size=11, color="#52616d"))
+fig_state.add_annotation(x=axis_limit * 0.70, y=axis_limit * 0.34, text=tr("Below line: reduced sediment-bed fraction", "Unterhalb der Linie: verringerter Sedimentbettanteil"), showarrow=False, font=dict(size=11, color="#52616d"))
+fig_state.update_layout(title=tr("C. Sedimentation state diagram", "C. Zustandsdiagramm der Sedimentation"), template="plotly_white", height=360, margin=dict(l=60, r=25, t=50, b=50), font=dict(family="Arial, sans-serif", size=13, color="#243447"), xaxis=dict(title=tr("Mid sediment-bed fraction (%)", "Sedimentbettanteil Zwischenbeobachtung (%)"), range=[0, axis_limit], gridcolor="#edf0f2", zeroline=False), yaxis=dict(title=tr("Final sediment-bed fraction (%)", "Finaler Sedimentbettanteil (%)"), range=[0, axis_limit], gridcolor="#edf0f2", zeroline=False, scaleanchor="x", scaleratio=1))
 sed_tabs[2].plotly_chart(fig_state, width="stretch", config={"displayModeBar": False})
 
 sed_tabs[2].caption("Samples A–F were evaluated at 50 mL total volume, whereas Sample G was evaluated at 10 mL. All marks are direct graduated-cylinder measurements; no interpolation, kinetic model, stability class, or cross-module comparison is applied.")
@@ -1359,7 +1364,7 @@ sed_tabs[4].markdown(
 with rheology_tabs[4]:
     st.header(T["summary_header"])
     st.info(
-        "This section reports only measured observables from the three rheology workbooks and converts them into a research-style stability interpretation."
+        tr("This section reports only measured observables from the three rheology workbooks and converts them into a research-style stability interpretation.", "Dieser Abschnitt berichtet ausschließlich gemessene Größen aus den drei Rheologie-Arbeitsmappen und überführt sie in eine wissenschaftliche Stabilitätsinterpretation.")
     )
 
     summary_metrics = pd.DataFrame(
@@ -1374,7 +1379,7 @@ with rheology_tabs[4]:
     st.dataframe(summary_metrics, width="stretch", hide_index=True)
 
     sample_compare = st.multiselect(
-        "Sample comparison mode",
+        tr("Sample comparison mode", "Probenvergleich"),
         options=sample_profiles["Sample_ID"].tolist(),
         default=sample_profiles["Sample_ID"].tolist()[:3],
     )
@@ -1390,7 +1395,7 @@ with rheology_tabs[4]:
 
     if sample_compare:
         parameter_df = sample_profiles[sample_profiles["Sample_ID"].isin(sample_compare)].copy()
-        st.markdown("### Sample-level derived rheology parameters")
+        st.markdown(tr("### Sample-level derived rheology parameters", "### Abgeleitete rheologische Parameter auf Probenebene"))
         radar_features = [
             ("Mean_Viscosity", "Low-shear viscosity"),
             ("Flow_behavior_index_n", "Shear-thinning strength"),
@@ -1417,53 +1422,53 @@ with rheology_tabs[4]:
                     fill="toself", opacity=0.18, line=dict(color=palette[index % len(palette)], width=2),
                     name=radar_source.iloc[index]["Sample_ID"],
                 ))
-        radar_fig.update_layout(template="plotly_white", title="Relative rheological fingerprint", height=600,
+        radar_fig.update_layout(template="plotly_white", title=tr("Relative rheological fingerprint", "Relatives rheologisches Profil"), height=600,
                                 polar=dict(radialaxis=dict(visible=True, range=[0, 1], tickvals=[0, 0.5, 1])),
                                 legend=dict(orientation="h", yanchor="bottom", y=1.08))
         st.plotly_chart(radar_fig, width="stretch")
-        st.caption("Radar dimensions are min–max normalized across the selected parent samples and therefore represent relative rheological fingerprints rather than values in physical units.")
-        st.info("The radar area is not a validated stability score. Each rheological dimension must be interpreted separately and together with replicate variability and model quality.")
+        st.caption(tr("Radar dimensions are min–max normalized across the selected parent samples and therefore represent relative rheological fingerprints rather than values in physical units.", "Die Radardimensionen sind über die ausgewählten Ausgangsproben Min-Max-normalisiert und stellen daher relative rheologische Profile statt Werte in physikalischen Einheiten dar."))
+        st.info(tr("The radar area is not a validated stability score. Each rheological dimension must be interpreted separately and together with replicate variability and model quality.", "Die Radarfläche ist kein validierter Stabilitätsscore. Jede rheologische Dimension muss einzeln sowie zusammen mit Replikatvariabilität und Modellqualität interpretiert werden."))
         st.dataframe(
             parameter_df[["Sample_ID", "Product_Type", *parameter_features]],
             width="stretch",
             hide_index=True,
         )
-        st.caption("Values are sample-level derived summaries. A parameter forest plot is not shown because replicate-level parameter confidence intervals have not yet been calculated independently.")
+        st.caption(tr("Values are sample-level derived summaries. A parameter forest plot is not shown because replicate-level parameter confidence intervals have not yet been calculated independently.", "Die Werte sind abgeleitete Zusammenfassungen auf Probenebene. Ein Forest-Plot wird nicht gezeigt, da Konfidenzintervalle der Parameter auf Replikatebene noch nicht unabhängig berechnet wurden."))
     else:
-        st.warning("Select at least one sample to display the sample-level derived parameter table.")
+        st.warning(tr("Select at least one sample to display the sample-level derived parameter table.", "Wählen Sie mindestens eine Probe aus, um die Tabelle der abgeleiteten Parameter anzuzeigen."))
 
-    st.markdown("### Thesis conclusion")
+    st.markdown(tr("### Thesis conclusion", "### Schlussfolgerung der Masterarbeit"))
     st.markdown(
-        "The synthesis section summarizes the measured rheological evidence in a thesis-style context. The resulting interpretation is based on elastic dominance, structural retention, and suspension behaviour rather than on raw spreadsheet presentation alone."
+        tr("The synthesis section summarizes the measured rheological evidence in a thesis-style context. The resulting interpretation is based on elastic dominance, structural retention, and suspension behaviour rather than on raw spreadsheet presentation alone.", "Der Syntheseabschnitt fasst die gemessenen rheologischen Erkenntnisse im Kontext der Masterarbeit zusammen. Die Interpretation basiert auf elastischer Dominanz, Strukturerhaltung und Suspensionsverhalten und nicht allein auf der Darstellung von Rohdaten.")
     )
 
 with rheology_tabs[5]:
-    st.header("Rheology Metadata and Raw Data")
+    st.header(tr("Rheology Metadata and Raw Data", "Rheologie-Metadaten und Rohdaten"))
     sample_overview_table = sample_overview[["Sample_ID", "Product_Type", "Manufacturing_Date", "Number_of_Replicates"]].copy()
     st.dataframe(sample_overview_table, width="stretch", hide_index=True)
-    st.subheader("Replicate Details")
+    st.subheader(tr("Replicate Details", "Details der Wiederholungen"))
     replicate_details = (
         meta[["Measurement_ID", "Parent_Sample", "Replicate_Number"]]
         .sort_values(["Parent_Sample", "Replicate_Number"])
         .reset_index(drop=True)
     )
     st.dataframe(replicate_details, width="stretch", hide_index=True)
-    st.subheader("Raw Rheology Data")
-    with st.expander("Flow curve workbook data"):
+    st.subheader(tr("Raw Rheology Data", "Rheologische Rohdaten"))
+    with st.expander(tr("Flow curve workbook data", "Arbeitsmappendaten der Fließkurve")):
         st.dataframe(flow, width="stretch", hide_index=True)
-    with st.expander("Amplitude sweep workbook data"):
+    with st.expander(tr("Amplitude sweep workbook data", "Arbeitsmappendaten des Amplitudensweeps")):
         st.dataframe(amp, width="stretch", hide_index=True)
-    with st.expander("Frequency sweep workbook data"):
+    with st.expander(tr("Frequency sweep workbook data", "Arbeitsmappendaten des Frequenzsweeps")):
         st.dataframe(freq, width="stretch", hide_index=True)
 
 with rheology_tabs[6]:
-    st.header("Rheology References")
-    st.caption("Rheology-specific scientific sources supporting interpretation of the measured response.")
+    st.header(tr("Rheology References", "Rheologische Literatur"))
+    st.caption(tr("Rheology-specific scientific sources supporting interpretation of the measured response.", "Rheologiespezifische wissenschaftliche Quellen zur Unterstützung der Interpretation der gemessenen Antwort."))
     for ref in REFERENCE_LIBRARY:
         with st.expander(ref["title"]):
-            st.write("Link to publication:", ref["publication_link"])
-            st.write("DOI / journal reference:", ref["doi"])
-            st.write("Relevance:", ref["relevance"])
+            st.write(tr("Link to publication:", "Link zur Publikation:"), ref["publication_link"])
+            st.write(tr("DOI / journal reference:", "DOI / Zeitschriftenreferenz:"), ref["doi"])
+            st.write(tr("Relevance:", "Relevanz:"), ref["relevance"])
 
 with top_tabs[5]:
     st.header(T["literature_header"])
