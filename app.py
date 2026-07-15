@@ -102,7 +102,6 @@ TRANSLATIONS = {
 }
 
 TRANSLATIONS["EN"].update({
-    "theme": "Theme", "theme_light": "Professional light", "theme_dark": "Dark mode",
     "dashboard_settings": "Dashboard Settings", "scientific_modules": "Scientific Modules",
     "experimental_assets": "Experimental Assets", "project_information": "Project Information",
     "rheology": "Rheology", "physicochemical": "Physicochemical", "sedimentation": "Sedimentation", "microbiology": "Microbiology",
@@ -124,7 +123,6 @@ TRANSLATIONS["EN"].update({
     "sed_dataset": "Measured sedimentation dataset",
 })
 TRANSLATIONS["DE"].update({
-    "theme": "Design", "theme_light": "Professionell hell", "theme_dark": "Dunkelmodus",
     "dashboard_settings": "Dashboard-Einstellungen", "scientific_modules": "Wissenschaftliche Module",
     "experimental_assets": "Experimentelle Datenquellen", "project_information": "Projektinformationen",
     "rheology": "Rheologie", "physicochemical": "Physikochemie", "sedimentation": "Sedimentation", "microbiology": "Mikrobiologie",
