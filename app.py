@@ -1,5 +1,7 @@
 ﻿from pathlib import Path
 
+import base64
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -64,18 +66,23 @@ st.markdown(
     .brand-kicker { color: rgba(255,255,255,.55) !important; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; margin-top: .2rem; }
 
     .dashboard-hero {
-        position: relative; overflow: hidden; padding: 2.2rem 2.35rem 2rem; margin: .25rem 0 1.35rem;
+        position: relative; overflow: hidden; min-height: 390px; padding: 2.3rem 42% 2.2rem 2.35rem; margin: .25rem 0 1.35rem;
+        display: flex; flex-direction: column; justify-content: center;
         border-radius: 26px; color: white;
-        background: linear-gradient(120deg, #0a2942 0%, #0d526a 63%, #168395 100%);
+        background-color: #071c31; background-size: cover; background-position: center;
         box-shadow: 0 24px 60px rgba(8, 52, 76, .22);
+    }
+    .dashboard-hero::before {
+        content: ""; position: absolute; inset: 0; z-index: 0;
+        background: linear-gradient(90deg, rgba(4,19,37,.96) 0%, rgba(5,28,50,.90) 34%, rgba(6,38,58,.45) 59%, rgba(5,36,51,.06) 100%);
     }
     .dashboard-hero::after {
         content: ""; position: absolute; width: 300px; height: 300px; right: -80px; top: -125px;
         border: 1px solid rgba(255,255,255,.16); border-radius: 50%; box-shadow: 0 0 0 45px rgba(255,255,255,.035), 0 0 0 95px rgba(255,255,255,.025);
     }
-    .hero-eyebrow { color: #9ee6df; font-size: .72rem; font-weight: 750; letter-spacing: .16em; text-transform: uppercase; margin-bottom: .6rem; }
-    .hero-title { position: relative; z-index: 1; max-width: 980px; font-size: clamp(2rem, 3.3vw, 3.35rem); line-height: 1.04; font-weight: 780; letter-spacing: -.035em; margin: 0 0 .75rem; }
-    .hero-subtitle { position: relative; z-index: 1; max-width: 980px; color: rgba(255,255,255,.72); font-size: 1rem; line-height: 1.65; }
+    .hero-eyebrow { position: relative; z-index: 1; color: #9ee6df; font-size: .72rem; font-weight: 750; letter-spacing: .16em; text-transform: uppercase; margin-bottom: .6rem; }
+    .hero-title { position: relative; z-index: 1; font-size: clamp(2rem, 3.3vw, 3.35rem); line-height: 1.04; font-weight: 780; letter-spacing: -.035em; margin: 0 0 .75rem; }
+    .hero-subtitle { position: relative; z-index: 1; color: rgba(255,255,255,.72); font-size: 1rem; line-height: 1.65; }
     .hero-meta { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.25rem; }
     .hero-chip { padding: .42rem .72rem; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; background: rgba(255,255,255,.08); color: rgba(255,255,255,.82); font-size: .78rem; }
 
@@ -148,7 +155,8 @@ st.markdown(
 
     @media (max-width: 800px) {
         .block-container { padding: 1rem 1rem 3rem; }
-        .dashboard-hero { padding: 1.55rem 1.3rem; border-radius: 20px; }
+        .dashboard-hero { min-height: 430px; padding: 1.55rem 1.3rem; border-radius: 20px; justify-content: flex-end; background-position: 68% center; }
+        .dashboard-hero::before { background: linear-gradient(180deg, rgba(4,19,37,.24) 0%, rgba(4,19,37,.52) 48%, rgba(4,19,37,.96) 76%); }
         .hero-title { font-size: 2rem; }
         [data-testid="stMetric"] { min-height: 100px; }
         .audit-ribbon, .evidence-grid { grid-template-columns: 1fr 1fr; }
@@ -257,6 +265,13 @@ T = TRANSLATIONS[LANG]
 def tr(english: str, german: str) -> str:
     """Return user-facing copy in the currently selected language."""
     return german if LANG == "DE" else english
+
+
+@st.cache_data
+def image_data_uri(path_string: str) -> str:
+    """Encode a local dashboard asset for reliable Streamlit CSS embedding."""
+    image_bytes = Path(path_string).read_bytes()
+    return f"data:image/png;base64,{base64.b64encode(image_bytes).decode('ascii')}"
 
 
 def resolve_dataset_path(filename: str) -> Path:
@@ -638,9 +653,12 @@ flow_behavior_index_n, consistency_coefficient_k = fit_power_law(flow)
 
 sample_overview["Manufacturing_Date"] = sample_overview["Manufacturing_Date"].dt.strftime("%d.%m.%Y")
 
+hero_image_path = Path(__file__).resolve().parent / "images" / "caipiringwer-hero.png"
+hero_image_uri = image_data_uri(str(hero_image_path)) if hero_image_path.exists() else ""
+
 st.markdown(
     f"""
-    <section class="dashboard-hero">
+    <section class="dashboard-hero" style="background-image:url('{hero_image_uri}')">
         <div class="hero-eyebrow">{tr('Applied beverage science · MSc research platform', 'Angewandte Getränkewissenschaft · MSc-Forschungsplattform')}</div>
         <div class="hero-title">{T['title']}</div>
         <div class="hero-subtitle">{T['subtitle']}</div>
