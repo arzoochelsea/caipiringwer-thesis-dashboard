@@ -96,19 +96,6 @@ data/microbiology/
 
 Keep the repository **private** while it contains unpublished thesis data, laboratory photographs, company information, or identifiable research records.
 
-Before making the repository public:
-
-1. remove confidential or proprietary datasets;
-2. remove personal or institutional identifiers that should not be published;
-3. replace raw data with anonymized demonstration data where necessary;
-4. verify image publication permission;
-5. confirm approval from the thesis supervisor and industry partner.
-
-## Author
-
-Arzoo  
-MSc Applied Biotechnology  
-Hochschule Ansbach
 
 ## License
 
