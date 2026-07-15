@@ -533,7 +533,6 @@ st.caption(T["subtitle"])
 with st.sidebar:
     st.subheader(T["dashboard_settings"])
     st.caption(f"{T['language']}: {LANG}")
-    st.caption(f"{T['theme']}: {T['theme_light']}")
     st.divider()
     st.subheader(T["scientific_modules"])
     st.markdown(
