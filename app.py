@@ -66,7 +66,7 @@ st.markdown(
     .brand-kicker { color: rgba(255,255,255,.55) !important; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; margin-top: .2rem; }
 
     .dashboard-hero {
-        position: relative; overflow: hidden; min-height: 390px; padding: 2.3rem 42% 2.2rem 2.35rem; margin: .25rem 0 1.35rem;
+        position: relative; overflow: hidden; min-height: 315px; padding: 2rem 42% 1.9rem 2.35rem; margin: .25rem 0 1rem;
         display: flex; flex-direction: column; justify-content: center;
         border-radius: 26px; color: white;
         background-color: #071c31; background-size: cover; background-position: center;
@@ -81,7 +81,7 @@ st.markdown(
         border: 1px solid rgba(255,255,255,.16); border-radius: 50%; box-shadow: 0 0 0 45px rgba(255,255,255,.035), 0 0 0 95px rgba(255,255,255,.025);
     }
     .hero-eyebrow { position: relative; z-index: 1; color: #9ee6df; font-size: .72rem; font-weight: 750; letter-spacing: .16em; text-transform: uppercase; margin-bottom: .6rem; }
-    .hero-title { position: relative; z-index: 1; font-size: clamp(2rem, 3.3vw, 3.35rem); line-height: 1.04; font-weight: 780; letter-spacing: -.035em; margin: 0 0 .75rem; }
+    .hero-title { position: relative; z-index: 1; font-size: clamp(1.9rem, 3vw, 2.85rem); line-height: 1.04; font-weight: 780; letter-spacing: -.035em; margin: 0 0 .75rem; }
     .hero-subtitle { position: relative; z-index: 1; color: rgba(255,255,255,.72); font-size: 1rem; line-height: 1.65; }
     .hero-meta { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.25rem; }
     .hero-chip { padding: .42rem .72rem; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; background: rgba(255,255,255,.08); color: rgba(255,255,255,.82); font-size: .78rem; }
@@ -93,17 +93,45 @@ st.markdown(
     p, li { line-height: 1.68; }
     [data-testid="stCaptionContainer"] { color: var(--muted); }
 
-    .stTabs [data-baseweb="tab-list"] {
-        gap: .3rem; padding: .35rem; margin: .2rem 0 1.15rem;
-        border: 1px solid var(--line); border-radius: 15px; background: rgba(255,255,255,.72);
-        box-shadow: 0 7px 24px rgba(15, 62, 88, .05); overflow-x: auto;
+    div[data-testid="stTabs"] > div[data-baseweb="tab-list"] {
+        gap: .42rem; padding: .52rem; margin: .15rem 0 1.25rem;
+        border: 1px solid rgba(11,65,93,.16); border-radius: 16px; background: #ffffff;
+        box-shadow: 0 12px 32px rgba(14,53,78,.08); overflow-x: auto;
     }
-    .stTabs [data-baseweb="tab"] {
-        height: 2.65rem; padding: 0 .95rem; border-radius: 11px; border: 0;
-        color: #567084; font-weight: 650; white-space: nowrap;
+    div[data-testid="stTabs"] > div[data-baseweb="tab-list"] button[data-baseweb="tab"] {
+        min-height: 3rem; padding: 0 1rem; border-radius: 11px; border: 1px solid transparent;
+        color: #405e72; font-size: .88rem; font-weight: 710; white-space: nowrap;
     }
-    .stTabs [aria-selected="true"] { color: #0b526d !important; background: white !important; box-shadow: 0 5px 16px rgba(12, 68, 98, .10); }
-    .stTabs [data-baseweb="tab-highlight"] { display: none; }
+    div[data-testid="stTabs"] > div[data-baseweb="tab-list"] button[aria-selected="true"] {
+        color: white !important; background: linear-gradient(135deg, #0b526d, #147f91) !important;
+        box-shadow: 0 8px 20px rgba(12,82,109,.22);
+    }
+    div[data-testid="stTabs"] [data-baseweb="tab-highlight"] { display: none; }
+    div[data-testid="stTabs"] div[data-testid="stTabs"] > div[data-baseweb="tab-list"] {
+        gap: .25rem; padding: .3rem; margin: .1rem 0 1rem; border-radius: 12px;
+        border-color: rgba(20,108,148,.12); background: rgba(225,239,244,.72); box-shadow: none;
+    }
+    div[data-testid="stTabs"] div[data-testid="stTabs"] > div[data-baseweb="tab-list"] button[data-baseweb="tab"] {
+        min-height: 2.4rem; padding: 0 .78rem; border-radius: 9px; color: #587286; font-size: .78rem; font-weight: 670;
+    }
+    div[data-testid="stTabs"] div[data-testid="stTabs"] > div[data-baseweb="tab-list"] button[aria-selected="true"] {
+        color: #0b526d !important; background: #ffffff !important; box-shadow: 0 4px 12px rgba(12,68,98,.09);
+    }
+
+    .navigation-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin: 1.2rem 0 .65rem; }
+    .navigation-kicker { color: #168b91; font-size: .68rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    .navigation-title { color: #102f45; font-size: 1.22rem; font-weight: 780; margin-top: .18rem; }
+    .navigation-help { color: #6b8291; font-size: .78rem; text-align: right; }
+    .report-map { display: grid; grid-template-columns: .85fr 2.1fr 1.15fr; gap: .7rem; margin: 0 0 .9rem; }
+    .report-map-group { padding: .82rem .95rem; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.88); box-shadow: 0 8px 22px rgba(14,53,78,.05); }
+    .report-map-group.primary { border-color: rgba(20,108,148,.25); background: linear-gradient(135deg, rgba(20,108,148,.10), rgba(255,255,255,.94)); }
+    .report-map-label { color: #778c9a; font-size: .62rem; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+    .report-map-value { color: #173b50; font-size: .79rem; font-weight: 680; line-height: 1.45; margin-top: .22rem; }
+    .module-nav-label { display: flex; align-items: center; gap: .55rem; margin: .15rem 0 .45rem; color: #5f7788; font-size: .76rem; font-weight: 680; }
+    .module-nav-label::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #2fa7b8; box-shadow: 0 0 0 4px rgba(47,167,184,.12); }
+    .workspace-banner { padding: 1rem 1.15rem; margin: .2rem 0 1rem; border-radius: 16px; border-left: 4px solid #146c94; background: linear-gradient(105deg, rgba(20,108,148,.10), rgba(255,255,255,.92)); }
+    .workspace-banner strong { display: block; color: #103a53; font-size: 1.05rem; margin-bottom: .22rem; }
+    .workspace-banner span { color: #647d8d; font-size: .82rem; }
 
     [data-testid="stMetric"] {
         min-height: 116px; padding: 1.05rem 1.15rem;
@@ -133,7 +161,7 @@ st.markdown(
 
     .audit-ribbon {
         display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px;
-        margin: -.35rem 0 1.5rem; overflow: hidden; border: 1px solid var(--line);
+        margin: -.2rem 0 1rem; overflow: hidden; border: 1px solid var(--line);
         border-radius: 16px; background: var(--line); box-shadow: 0 10px 28px rgba(14,53,78,.05);
     }
     .audit-item { padding: .82rem 1rem; background: rgba(255,255,255,.88); }
@@ -247,6 +275,9 @@ st.markdown(
         .dashboard-hero::before { background: linear-gradient(180deg, rgba(4,19,37,.24) 0%, rgba(4,19,37,.52) 48%, rgba(4,19,37,.96) 76%); }
         .hero-title { font-size: 2rem; }
         [data-testid="stMetric"] { min-height: 100px; }
+        .report-map { grid-template-columns: 1fr; }
+        .navigation-header { align-items: flex-start; flex-direction: column; }
+        .navigation-help { text-align: left; }
         .audit-ribbon, .evidence-grid, .study-grid, .process-strip, .story-rail, .experiment-grid { grid-template-columns: 1fr 1fr; }
         .shelf-hero { min-height: 340px; background-position: 40% center; }
         .bottle-story { min-height: 420px; }
@@ -847,7 +878,7 @@ if visual_density == tr("Compact", "Kompakt"):
         .block-container { max-width: 1580px; }
         [data-testid="stMetric"] { min-height: 96px; padding: .8rem .9rem; }
         [data-testid="stPlotlyChart"] { padding: .35rem; }
-        .stTabs [data-baseweb="tab"] { height: 2.35rem; }
+        div[data-testid="stTabs"] > div[data-baseweb="tab-list"] button[data-baseweb="tab"] { min-height: 2.5rem; }
         </style>
         """,
         unsafe_allow_html=True,
@@ -867,14 +898,49 @@ chart_theme = go.layout.Template(
     )
 )
 
+st.markdown(
+    f"""
+    <div class="navigation-header">
+        <div>
+            <div class="navigation-kicker">{tr('Report navigation', 'Berichtsnavigation')}</div>
+            <div class="navigation-title">{tr('Select a workspace', 'Arbeitsbereich auswählen')}</div>
+        </div>
+        <div class="navigation-help">{tr('Primary tabs open a module · secondary tabs select its analysis view', 'Primäre Register öffnen ein Modul · sekundäre Register wählen die Analyseansicht')}</div>
+    </div>
+    <div class="report-map">
+        <div class="report-map-group primary">
+            <div class="report-map-label">01 · {tr('Start', 'Start')}</div>
+            <div class="report-map-value">{T['top_executive']}</div>
+        </div>
+        <div class="report-map-group">
+            <div class="report-map-label">02 · {tr('Analytical modules', 'Analysemodule')}</div>
+            <div class="report-map-value">{T['rheology']} · {T['physicochemical']} · {T['sedimentation']} · {T['microbiology']}</div>
+        </div>
+        <div class="report-map-group">
+            <div class="report-map-label">03 · {tr('Synthesis', 'Synthese')}</div>
+            <div class="report-map-value">{T['top_references']} · {T['top_shelf_life']}</div>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
 top_tabs = st.tabs([
     T["top_executive"], T["top_rheology"], T["top_physchem"],
     T["top_sedimentation"], T["top_microbiology"], T["top_references"], T["top_shelf_life"],
 ])
+top_tabs[1].markdown(
+    f'<div class="module-nav-label">{tr("Rheology workspace · select an analysis view", "Arbeitsbereich Rheologie · Analyseansicht auswählen")}</div>',
+    unsafe_allow_html=True,
+)
 rheology_tabs = top_tabs[1].tabs([
     T["rheo_overview"], T["flow_curve"], T["amplitude_sweep"],
     T["frequency_sweep"], T["rheo_interpretation"], T["rheo_metadata"], T["rheo_references"],
 ])
+top_tabs[2].markdown(
+    f'<div class="module-nav-label">{tr("Physicochemical workspace", "Arbeitsbereich Physikochemie")}</div>',
+    unsafe_allow_html=True,
+)
 physicochemical_tabs = top_tabs[2].tabs([
     T["overview"],
 ])
@@ -946,6 +1012,10 @@ MICRO_COPY = {
     },
 }
 M = MICRO_COPY[LANG]
+top_tabs[4].markdown(
+    f'<div class="module-nav-label">{tr("Microbiology workspace · select an evidence view", "Arbeitsbereich Mikrobiologie · Evidenzansicht auswählen")}</div>',
+    unsafe_allow_html=True,
+)
 microbiology_tabs = top_tabs[4].tabs([
     T["micro_exec"], T["micro_results"], T["micro_visual"], T["micro_interpretation"], T["micro_shelf"], T["micro_literature"],
 ])
@@ -1240,8 +1310,10 @@ with microbiology_tabs[5]:
         "- ICMSF. *Microorganisms in Foods* series: principles and applications for food microbiological safety and quality."
     )
 
-top_tabs[0].header(T["executive_project"])
-top_tabs[0].markdown(T["subtitle"])
+top_tabs[0].markdown(
+    f'<div class="workspace-banner"><strong>{tr("Executive overview", "Managementübersicht")}</strong><span>{tr("Start here for the study structure, analytical coverage and evidence status. Use the primary navigation above to open a scientific module.", "Startpunkt für Studienstruktur, analytische Abdeckung und Evidenzstatus. Über die primäre Navigation oben wird ein wissenschaftliches Modul geöffnet.")}</span></div>',
+    unsafe_allow_html=True,
+)
 top_tabs[0].markdown(f"### {T['study_architecture']}")
 top_tabs[0].write(tr("Four independent analytical modules contribute complementary evidence. Integration is limited to high-level narrative interpretation.", "Vier unabhängige Analysemodule liefern sich ergänzende Erkenntnisse. Die Integration beschränkt sich auf eine übergeordnete narrative Interpretation."))
 top_tabs[0].markdown(
@@ -1322,8 +1394,6 @@ top_tabs[0].markdown(
 top_tabs[0].markdown(f"### {T['integrated_conclusion']}")
 top_tabs[0].write(tr("The dashboard presents module-specific measured evidence without merging experimental identifiers or performing cross-module statistical comparisons.", "Das Dashboard stellt modulspezifische Messdaten dar, ohne experimentelle Kennungen zusammenzuführen oder modulübergreifende statistische Vergleiche durchzuführen."))
 top_tabs[0].info(T["data_integrity"])
-top_tabs[0].caption(T["bottle_statement"])
-top_tabs[0].caption(T["bottle_limitation"])
 
 with rheology_tabs[0]:
     st.header(tr("Rheology Overview and Experimental Design", "Rheologieübersicht und Versuchsdesign"))
@@ -1359,7 +1429,6 @@ with rheology_tabs[0]:
             "**03 · Messposition**  \nIn Messposition abgesenkte obere Geometrie für die kontrollierte rotatorische und oszillatorische Charakterisierung.",
         )
     )
-    st.caption(T["bottle_statement"])
     st.metric(tr("Parent samples / replicate measurements", "Ausgangsproben / Wiederholungsmessungen"), f"{sample_overview['Sample_ID'].nunique()} / {len(meta)}")
     st.markdown(tr("### Rheology results summary", "### Zusammenfassung der Rheologieergebnisse"))
     st.write(tr(f"Mean G′: {mean_gprime:.3g} Pa; Mean G″: {mean_gdouble:.3g} Pa; Mean tanδ: {mean_tandelta:.3f}; flow index n: {flow_behavior_index_n:.3f}.", f"Mittleres G′: {mean_gprime:.3g} Pa; mittleres G″: {mean_gdouble:.3g} Pa; mittleres tanδ: {mean_tandelta:.3f}; Fließindex n: {flow_behavior_index_n:.3f}."))
@@ -1568,7 +1637,10 @@ with physicochemical_tabs[0]:
 # REAL SEDIMENTATION ANALYSIS
 # ==========================================================
 
-top_tabs[3].markdown(f"### {T['sed_dataset']}")
+top_tabs[3].markdown(
+    f'<div class="module-nav-label">{tr("Sedimentation workspace · select an evidence view", "Arbeitsbereich Sedimentation · Evidenzansicht auswählen")}</div>',
+    unsafe_allow_html=True,
+)
 sed_tabs = top_tabs[3].tabs([
     "📊 " + T["overview"],
     T["sed_images"],
@@ -1623,6 +1695,7 @@ sed_df["Final sediment-bed fraction (%)"] = (
 ).round(1)
 
 with sed_tabs[0]:
+    st.header(T["sed_dataset"])
     st.dataframe(sed_df, width="stretch", hide_index=True)
 
     col1,col2,col3,col4 = st.columns(4)
