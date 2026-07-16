@@ -1672,8 +1672,8 @@ with col1:
 
 with col2:
     st.image(
-        "images/sediment_mid.png",
-        caption=tr("Intermediate observation (11 February)", "Zwischenbeobachtung (11. Februar)"),
+        "images/sediment_mid_labeled.png",
+        caption=tr("Intermediate observation (11 February) · Samples A–G", "Zwischenbeobachtung (11. Februar) · Proben A–G"),
         width="stretch"
     )
 
