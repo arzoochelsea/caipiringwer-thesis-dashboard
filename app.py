@@ -1661,19 +1661,26 @@ sed_tabs[1].markdown("### 8. Visual Evidence")
 with sed_tabs[1]:
   st.subheader("Visual Sedimentation Evolution")
 
-col1, col2 = sed_tabs[1].columns(2)
+col1, col2, col3 = sed_tabs[1].columns(3)
 
 with col1:
     st.image(
-        "images/sediment_mid.png",
-        caption="Mid-storage sedimentation observation (11 February)",
+        "images/sediment_initial_labeled.png",
+        caption=tr("Initial phase · Samples A–G", "Ausgangsphase · Proben A–G"),
         width="stretch"
     )
 
 with col2:
     st.image(
-        "images/sediment_final.png",
-        caption="Final sedimentation observation (11 March)",
+        "images/sediment_mid.png",
+        caption=tr("Intermediate observation (11 February)", "Zwischenbeobachtung (11. Februar)"),
+        width="stretch"
+    )
+
+with col3:
+    st.image(
+        "images/sediment_final_labeled.png",
+        caption=tr("Final sedimentation observation (11 March) · Samples A–G", "Finale Sedimentationsbeobachtung (11. März) · Proben A–G"),
         width="stretch"
     )
 
