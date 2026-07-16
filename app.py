@@ -1331,6 +1331,34 @@ with rheology_tabs[0]:
     st.write(tr("Rheology was selected because structural, viscoelastic, and flow properties are relevant to physical stability and suspension behaviour.", "Rheologische Untersuchungen wurden gewählt, weil Struktur-, viskoelastische und Fließeigenschaften für die physikalische Stabilität und das Suspensionsverhalten relevant sind."))
     st.markdown(tr("### Experimental Design", "### Versuchsdesign"))
     st.write(tr("Methods: Flow curve, amplitude sweep, frequency sweep. Instrument: Kinexus Prime Lab+. Research partners: Hochschule Ansbach and Marmeladenherz.", "Methoden: Fließkurve, Amplitudensweep und Frequenzsweep. Gerät: Kinexus Prime Lab+. Forschungspartner: Hochschule Ansbach und Marmeladenherz."))
+    st.markdown(tr("### Instrumentation and measurement sequence", "### Instrumentierung und Messablauf"))
+    st.image(
+        "images/kinexus_rheometer_workflow.png",
+        caption=tr(
+            "Kinexus Prime Lab+ rheometer: instrument overview, sample loading and measuring position.",
+            "Kinexus Prime Lab+ Rheometer: Geräteübersicht, Probenauftrag und Messposition.",
+        ),
+        width="stretch",
+    )
+    instrument_views = st.columns(3)
+    instrument_views[0].markdown(
+        tr(
+            "**01 · Instrument platform**  \nKinexus Prime Lab+ rotational rheometer used for the flow-curve, amplitude-sweep and frequency-sweep measurements.",
+            "**01 · Geräteplattform**  \nKinexus Prime Lab+ Rotationsrheometer für Fließkurven-, Amplitudensweep- und Frequenzsweep-Messungen.",
+        )
+    )
+    instrument_views[1].markdown(
+        tr(
+            "**02 · Sample loading**  \nBeverage sample positioned centrally on the lower measuring plate before the measuring system is closed.",
+            "**02 · Probenauftrag**  \nZentral auf der unteren Messplatte positionierte Getränkeprobe vor dem Schließen des Messsystems.",
+        )
+    )
+    instrument_views[2].markdown(
+        tr(
+            "**03 · Measurement position**  \nUpper geometry lowered into the measurement position for controlled rotational and oscillatory characterisation.",
+            "**03 · Messposition**  \nIn Messposition abgesenkte obere Geometrie für die kontrollierte rotatorische und oszillatorische Charakterisierung.",
+        )
+    )
     st.caption(T["bottle_statement"])
     st.metric(tr("Parent samples / replicate measurements", "Ausgangsproben / Wiederholungsmessungen"), f"{sample_overview['Sample_ID'].nunique()} / {len(meta)}")
     st.markdown(tr("### Rheology results summary", "### Zusammenfassung der Rheologieergebnisse"))
