@@ -1524,6 +1524,28 @@ with physicochemical_tabs[0]:
     )
 
     st.markdown(tr("### 2. Experimental Design", "### 2. Versuchsdesign"))
+    st.markdown(tr("#### Sample preparation and analytical instruments", "#### Probenvorbereitung und Analysegeräte"))
+    st.image(
+        "images/physicochemical_workflow.png",
+        caption=tr(
+            "Physicochemical workflow: filtration before analysis, followed by EasyDens and SmartRef measurement.",
+            "Physikochemischer Ablauf: Filtration vor der Analyse, anschließend Messung mit EasyDens und SmartRef.",
+        ),
+        width="stretch",
+    )
+    physchem_workflow = st.columns(2)
+    physchem_workflow[0].markdown(
+        tr(
+            "**01 · Filtration before analysis**  \nThe beverage samples were filtered individually before instrumental measurement to obtain the prepared analytical fractions shown. Samples remain identified separately throughout preparation.",
+            "**01 · Filtration vor der Analyse**  \nDie Getränkeproben wurden vor der instrumentellen Messung einzeln filtriert, um die dargestellten vorbereiteten Analysefraktionen zu erhalten. Die Probenkennzeichnung bleibt während der Vorbereitung getrennt erhalten.",
+        )
+    )
+    physchem_workflow[1].markdown(
+        tr(
+            "**02 · EasyDens and SmartRef**  \nThe Anton Paar EasyDens density meter and SmartRef refractometer form the documented instrument set for density-related measurements and soluble-solids determination in °Bx.",
+            "**02 · EasyDens und SmartRef**  \nDas Anton Paar EasyDens Dichtemessgerät und das SmartRef Refraktometer bilden den dokumentierten Gerätesatz für dichtebezogene Messungen und die Bestimmung der löslichen Feststoffe in °Bx.",
+        )
+    )
     if physchem.empty:
         st.warning(tr("The measured physicochemical workbook was not found at data/physicochemical/physicochemical_results.ods.", "Die gemessene physikochemische Arbeitsmappe wurde unter data/physicochemical/physicochemical_results.ods nicht gefunden."))
     else:
